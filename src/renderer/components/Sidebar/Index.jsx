@@ -1,0 +1,71 @@
+import React from 'react'
+import { Box, Divider, IconButton, Stack } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import HomeIcon from '@mui/icons-material/Home'
+import MusicNoteIcon from '@mui/icons-material/MusicNote'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic'
+import SettingsIcon from '@mui/icons-material/Settings'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+
+import logo from '../../../../resources/amblem-ai.png'
+
+const Sidebar = () => {
+  const navigate = useNavigate()
+
+  const handleNavigation = (route) => {
+    navigate(route)
+  }
+
+  return (
+    <Box
+      sx={{
+        height: '100vh',
+        width: '56px',
+        backdropFilter: 'blur(10px)',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '24px 0'
+      }}
+    >
+      <Box>
+        <IconButton onClick={() => handleNavigation('/login')} title="Account">
+          <img src={logo} alt="Amblem AI" style={{ width: '70%' }} />
+        </IconButton>
+      </Box>
+
+      <Stack spacing={2} alignItems="center">
+        <IconButton onClick={() => handleNavigation('/')} title="Home">
+          <HomeIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
+        </IconButton>
+        <IconButton onClick={() => handleNavigation('/music')} title="Music">
+          <MusicNoteIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
+        </IconButton>
+        <Divider sx={{ width: '70%', bgcolor: '#ffffff40' }} />
+        <IconButton onClick={() => handleNavigation('/favorites')} title="Favorites">
+          <FavoriteIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
+        </IconButton>
+        <IconButton onClick={() => handleNavigation('/library')} title="Library">
+          <LibraryMusicIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
+        </IconButton>
+        <IconButton onClick={() => handleNavigation('/settings')} title="Settings">
+          <SettingsIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
+        </IconButton>
+      </Stack>
+
+      <Box>
+        <IconButton onClick={() => handleNavigation('/login')} title="Account">
+          <AccountCircleIcon sx={{ fontSize: '18px', color: '#d8d8f6' }} />
+        </IconButton>
+      </Box>
+    </Box>
+  )
+}
+
+export default Sidebar
