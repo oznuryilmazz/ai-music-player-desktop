@@ -7,11 +7,16 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic'
 import SettingsIcon from '@mui/icons-material/Settings'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import LogoutIcon from '@mui/icons-material/Logout'
 
 import logo from '../../../../resources/amblem-ai.png'
+import { useUser } from '../../context/user'
 
 const Sidebar = () => {
   const navigate = useNavigate()
+  const { user } = useUser()
+
+  console.log('user', user)
 
   const handleNavigation = (route) => {
     navigate(route)
@@ -20,13 +25,8 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
-        height: '100vh',
         width: '56px',
         backdropFilter: 'blur(10px)',
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        bottom: 0,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -61,7 +61,11 @@ const Sidebar = () => {
 
       <Box>
         <IconButton onClick={() => handleNavigation('/login')} title="Account">
-          <AccountCircleIcon sx={{ fontSize: '18px', color: '#d8d8f6' }} />
+          {user?.id ? (
+            <AccountCircleIcon sx={{ fontSize: '18px', color: '#d8d8f6' }} />
+          ) : (
+            <LogoutIcon sx={{ fontSize: '18px', color: '#d8d8f6' }} />
+          )}
         </IconButton>
       </Box>
     </Box>

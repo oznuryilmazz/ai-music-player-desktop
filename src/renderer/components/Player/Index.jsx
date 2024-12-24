@@ -1,8 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, IconButton, Typography, Avatar } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import PauseIcon from '@mui/icons-material/Pause'
 import { Howl } from 'howler'
+import AudioWaveform from '../audio-wave'
 
 export const getCurrentTimeInMilliseconds = () => {
   const now = new Date()
@@ -15,6 +16,8 @@ export const getCurrentTimeInMilliseconds = () => {
 }
 
 const PlayerBar = ({ currentLiveItem }) => {
+  console.log('currentLiveItem', currentLiveItem)
+
   const [isPlaying, setIsPlaying] = useState(false)
   const [volume, setVolume] = useState(0.2)
   const [soundInstance, setSoundInstance] = useState(null)
@@ -67,7 +70,7 @@ const PlayerBar = ({ currentLiveItem }) => {
     return () => {
       if (newSound) {
         newSound.stop()
-        newSound.unload() // Temizleme eklenmiş
+        newSound.unload()
       }
     }
   }, [currentLiveItem])
@@ -79,6 +82,7 @@ const PlayerBar = ({ currentLiveItem }) => {
   }, [volume])
 
   const handlePlayPause = () => {
+    setVolume(0)
     if (soundInstance) {
       if (isPlaying) {
         soundInstance.pause()
@@ -99,12 +103,6 @@ const PlayerBar = ({ currentLiveItem }) => {
     }
   }, [soundInstance])
 
-  console.log('isPlaying', isPlaying)
-
-  const handleVolumeChange = (event, newValue) => {
-    setVolume(newValue)
-  }
-
   const updateCurrentTime = () => {
     if (soundInstance) {
       const currentSeekTime = soundInstance.seek() * 1000
@@ -116,17 +114,38 @@ const PlayerBar = ({ currentLiveItem }) => {
     }
   }
 
+  useEffect(() => {
+    let animationFrameId
+
+    const startUpdatingTime = () => {
+      if (soundInstance && isPlaying) {
+        const update = () => {
+          updateCurrentTime()
+          animationFrameId = requestAnimationFrame(update)
+        }
+        update()
+      }
+    }
+
+    startUpdatingTime()
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+      }
+    }
+  }, [soundInstance, isPlaying])
+
   return (
     <Box
       sx={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
         padding: '16px 24px',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         borderRadius: '16px',
-        width: '900px',
-        position: 'absolute',
+        width: '700px',
+        position: 'fixed',
         bottom: 30,
         margin: 'auto'
       }}
@@ -164,6 +183,7 @@ const PlayerBar = ({ currentLiveItem }) => {
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
+            alignItems: 'center',
             marginTop: '8px',
             color: '#fff',
             fontSize: '12px',
@@ -173,7 +193,13 @@ const PlayerBar = ({ currentLiveItem }) => {
           <Typography variant="caption">
             {new Date(currentTime).toISOString().substr(14, 5)}
           </Typography>
-          {/* <div ref={waveformRef} style={{ width: '100%' }} /> */}
+
+          <AudioWaveform
+            audioUrl={currentLiveItem?.url}
+            currentTime={currentTime}
+            duration={duration}
+          />
+
           <Typography variant="caption">
             {new Date(duration).toISOString().substr(14, 5)}
           </Typography>

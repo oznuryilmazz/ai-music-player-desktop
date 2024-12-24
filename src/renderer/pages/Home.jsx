@@ -1,24 +1,10 @@
 import { Box } from '@mui/material'
 import React from 'react'
-import Sidebar from '../components/Sidebar'
+import Sidebar from '../components/Sidebar/Index'
 import MusicList from '../components/MusicList/Index'
 
 const Home = () => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        height: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-    >
-      <Sidebar />
-
-      <MusicList />
-
-    </Box>
-  )
+  return <MusicList />
 }
 
 export default Home

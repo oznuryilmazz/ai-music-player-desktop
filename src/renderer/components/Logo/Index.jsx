@@ -2,6 +2,8 @@ import { forwardRef } from 'react'
 
 import { Box } from '@mui/material'
 
+import aiAmblem from '../../../../resources/amblem-ai.png'
+
 const Logo = forwardRef(({ disabledLink = false, width, sx, ...other }, ref) => {
   const logo = (
     <Box
@@ -13,7 +15,7 @@ const Logo = forwardRef(({ disabledLink = false, width, sx, ...other }, ref) => 
       }}
       {...other}
     >
-      <img src="/assets/amblem-ai.png" alt="ai music yazılım as" width={width} />
+      <img src={aiAmblem} alt="ai music yazılım as" width={width} />
     </Box>
   )
 
