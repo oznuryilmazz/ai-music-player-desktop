@@ -1,55 +1,42 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, Avatar, IconButton } from '@mui/material'
+import { Box, Typography, Avatar, IconButton, Skeleton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { dayjs } from '../../services/utils/dayjs'
+import dayjs from 'dayjs'
+
+import imgBg from '../../../../resources/ai-logo.jpg'
 import { TimelineManager } from '../../services/TimelineManager'
 import { createClient } from '../../services/supabase/client'
 import PlayerBar from '../Player/Index'
+import { useUser } from '../../context/user'
+import { listUser } from '../../../api/users'
+import { getCurrentTimeInMilliseconds, getStatus } from '../../services/utils/timeline'
 
 const supabase = createClient()
-
-const getStatus = (value, selectedDate) => {
-  const isToday = dayjs(selectedDate).isSame(dayjs(), 'day')
-
-  if (!isToday) {
-    return 'yayınlanacak'
-  }
-
-  const startTimeInMilliseconds = value.startTime
-  const durationInMilliseconds = value.duration
-  const endTimeInMilliseconds = startTimeInMilliseconds + durationInMilliseconds
-
-  if (
-    getCurrentTimeInMilliseconds() >= startTimeInMilliseconds &&
-    getCurrentTimeInMilliseconds() <= endTimeInMilliseconds
-  ) {
-    return 'yayında'
-  } else if (getCurrentTimeInMilliseconds() < startTimeInMilliseconds) {
-    return 'yayınlanacak'
-  } else {
-    return 'yayınlandı'
-  }
-}
-
-const getCurrentTimeInMilliseconds = () => {
-  const now = new Date()
-  return (
-    now.getHours() * 60 * 60 * 1000 +
-    now.getMinutes() * 60 * 1000 +
-    now.getSeconds() * 1000 +
-    now.getMilliseconds()
-  )
-}
 
 export default function MusicList() {
   const [timeline, setTimeline] = useState([])
   const [filteredTimeline, setFilteredTimeline] = useState([])
+  const [users, setUsers] = useState([])
   const [selectedDate, setSelectedDate] = useState(dayjs())
   const [loading, setLoading] = useState(true)
   const [currentLiveItem, setCurrentLiveItem] = useState(null)
+  const { user } = useUser()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await listUser()
+      console.log(
+        'data',
+        data?.data.filter((user) => user.role === 'branch')
+      )
+      setUsers(data?.data.filter((user) => user.role === 'branch'))
+    }
+
+    fetchData()
+  }, [])
 
   const formatTime = (milliseconds) => {
     const date = new Date(milliseconds)
@@ -61,7 +48,14 @@ export default function MusicList() {
     try {
       const timelineManager = new TimelineManager({
         client: supabase,
-        userId: '783916fd-d015-4e37-842c-298c6875a614',
+        userId:
+          user?.role === 'admin'
+            ? '783916fd-d015-4e37-842c-298c6875a614'
+            : user?.role === 'branch'
+              ? user?.id
+              : user?.role === 'partner'
+                ? users[0]?.id
+                : null,
         date: dayjs(selectedDate).utc(true).valueOf()
       })
       await timelineManager.requestUpdate()
@@ -90,16 +84,24 @@ export default function MusicList() {
         currentLiveItem.startTime + currentLiveItem.duration - getCurrentTimeInMilliseconds()
 
       const timeout = setTimeout(() => {
-        getTimeline() 
+        const currentIndex = timeline.findIndex(
+          (item) => item.startTime === currentLiveItem.startTime
+        )
+
+        if (currentIndex + 1 < timeline.length) {
+          setCurrentLiveItem(timeline[currentIndex + 1]) // Bir sonraki şarkıya geçiş
+        } else {
+          setCurrentLiveItem(null) // Liste sonuna ulaşıldığında
+        }
       }, remainingTime)
 
       return () => clearTimeout(timeout)
     }
-  }, [currentLiveItem])
+  }, [currentLiveItem, timeline])
 
   useEffect(() => {
     getTimeline()
-  }, [])
+  }, [selectedDate, users])
 
   return (
     <Box
@@ -138,7 +140,27 @@ export default function MusicList() {
         </Box>
 
         <Box sx={{ marginTop: 4 }}>
-          {filteredTimeline.length > 0 ? (
+          {loading ? (
+            // Skeleton Loader
+            Array.from(new Array(5)).map((_, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 2
+                }}
+              >
+                <Skeleton variant="text" width={30} />
+                <Skeleton variant="rectangular" width={56} height={56} />
+                <Box sx={{ flex: 1, marginLeft: 2 }}>
+                  <Skeleton variant="text" width="80%" />
+                  <Skeleton variant="text" width="60%" />
+                </Box>
+              </Box>
+            ))
+          ) : filteredTimeline.length > 0 ? (
             filteredTimeline.map((song, index) => (
               <Box
                 key={index}
@@ -166,7 +188,7 @@ export default function MusicList() {
                         song?.song?.albums?.cover_url ||
                         song?.stockAd?.cover_url ||
                         song?.specialAd?.cover_url ||
-                        `/assets/ai-logo.jpg`
+                        imgBg
                       }
                       alt="album cover"
                       style={{

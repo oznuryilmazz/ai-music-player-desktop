@@ -24,6 +24,7 @@ import { useUser } from '../../context/user'
 import { signIn } from '../../../api/auth/signin'
 import Logo from '../Logo/Index'
 import { useNavigate } from 'react-router-dom'
+import { getUser } from '../../../api/users'
 
 export default function LoginView({ searchParams }) {
   const theme = useTheme()
@@ -43,21 +44,21 @@ export default function LoginView({ searchParams }) {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const result = await signIn(values) // result'ı kontrol edin
-        console.log('success', result)
+        const result = await signIn(values)
 
         if (result?.success) {
           if (result?.data?.session) {
             localStorage.setItem('supabase.auth.token', JSON.stringify(result?.data?.session))
           }
 
-          // Eğer API yanıtında success döndürülüyorsa
-          setUser(result.data?.user) // Doğru kullanıcı bilgisini set edin
+          const user = await getUser(result.data?.user.id)
+
+          setUser(user?.data)
           navigate('/')
 
           console.log('User', result.data?.user)
         } else {
-          setShow(true) // Hata durumunda hata mesajını göster
+          setShow(true)
         }
       } catch (error) {
         console.error('Giriş işlemi başarısız:', error)

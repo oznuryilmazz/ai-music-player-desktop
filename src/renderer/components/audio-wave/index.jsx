@@ -1,10 +1,12 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useMemo } from 'react'
 
 const AudioWaveform = ({ audioUrl, currentTime, duration }) => {
   const canvasRef = useRef(null)
+  const waveformDataRef = useRef([]) // Waveform verilerini saklamak için useRef kullanıyoruz
 
-  useEffect(() => {
-    const fetchAudioData = async () => {
+  // Audio verisini getirme ve işleme işlemini optimize et
+  const waveformData = useMemo(() => {
+    const fetchWaveformData = async () => {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)()
       const response = await fetch(audioUrl)
       const arrayBuffer = await response.arrayBuffer()
@@ -25,10 +27,17 @@ const AudioWaveform = ({ audioUrl, currentTime, duration }) => {
         waveformData.push(sum / blockSize) // Ortalamayı hesapla
       }
 
-      drawWaveform(waveformData)
+      return waveformData
     }
 
-    const drawWaveform = (waveformData) => {
+    // Veriyi yalnızca `audioUrl` değiştiğinde getir
+    fetchWaveformData().then((data) => {
+      waveformDataRef.current = data
+    })
+  }, [audioUrl])
+
+  useEffect(() => {
+    const drawWaveform = () => {
       const canvas = canvasRef.current
       const ctx = canvas.getContext('2d')
 
@@ -38,6 +47,9 @@ const AudioWaveform = ({ audioUrl, currentTime, duration }) => {
       canvas.width = width * window.devicePixelRatio
       canvas.height = height * window.devicePixelRatio
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+
+      const waveformData = waveformDataRef.current
+      if (!waveformData || waveformData.length === 0) return
 
       const barWidth = width / 100 // Zoom: 100 çubuğu gösteriyoruz
       const zoomWindowSize = Math.floor(waveformData.length / 20) // Zoom penceresi
@@ -67,14 +79,14 @@ const AudioWaveform = ({ audioUrl, currentTime, duration }) => {
       render()
     }
 
-    fetchAudioData()
-  }, [audioUrl, currentTime, duration])
+    drawWaveform() // Waveform çizimini başlat
+  }, [currentTime, duration]) // currentTime ve duration değiştikçe yeniden çizim yapar
 
   return (
     <canvas
       ref={canvasRef}
       style={{
-        width: '100%',
+        width: '500px',
         height: '75px'
       }}
     />

@@ -11,15 +11,27 @@ import LogoutIcon from '@mui/icons-material/Logout'
 
 import logo from '../../../../resources/amblem-ai.png'
 import { useUser } from '../../context/user'
+import { createClient } from '../../services/supabase/client'
 
 const Sidebar = () => {
   const navigate = useNavigate()
-  const { user } = useUser()
+  const { user, setUser } = useUser()
+  const supabase = createClient()
 
   console.log('user', user)
 
   const handleNavigation = (route) => {
     navigate(route)
+  }
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut()
+      setUser(null)
+      navigate('/login')
+    } catch (error) {
+      console.error('Logout failed:', error.message)
+    }
   }
 
   return (
@@ -60,11 +72,14 @@ const Sidebar = () => {
       </Stack>
 
       <Box>
-        <IconButton onClick={() => handleNavigation('/login')} title="Account">
+        <IconButton
+          onClick={() => (user?.id ? handleLogout() : handleNavigation('/login'))}
+          title="Account"
+        >
           {user?.id ? (
-            <AccountCircleIcon sx={{ fontSize: '18px', color: '#d8d8f6' }} />
-          ) : (
             <LogoutIcon sx={{ fontSize: '18px', color: '#d8d8f6' }} />
+          ) : (
+            <AccountCircleIcon sx={{ fontSize: '18px', color: '#d8d8f6' }} />
           )}
         </IconButton>
       </Box>

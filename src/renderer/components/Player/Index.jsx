@@ -4,24 +4,15 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import PauseIcon from '@mui/icons-material/Pause'
 import { Howl } from 'howler'
 import AudioWaveform from '../audio-wave'
-
-export const getCurrentTimeInMilliseconds = () => {
-  const now = new Date()
-  return (
-    now.getHours() * 60 * 60 * 1000 +
-    now.getMinutes() * 60 * 1000 +
-    now.getSeconds() * 1000 +
-    now.getMilliseconds()
-  )
-}
+import { getCurrentTimeInMilliseconds } from '../../services/utils/timeline'
 
 const PlayerBar = ({ currentLiveItem }) => {
-  console.log('currentLiveItem', currentLiveItem)
-
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [volume, setVolume] = useState(0.2)
+  const [isPlaying, setIsPlaying] = useState(JSON.parse(localStorage.getItem('isPlaying')) || false)
+  const [volume, setVolume] = useState(parseFloat(localStorage.getItem('volume')) || 0.2)
   const [soundInstance, setSoundInstance] = useState(null)
-  const [currentTime, setCurrentTime] = useState(0)
+  const [currentTime, setCurrentTime] = useState(
+    parseFloat(localStorage.getItem('currentTime')) || 0
+  )
   const [duration, setDuration] = useState(0)
 
   useEffect(() => {
@@ -75,22 +66,29 @@ const PlayerBar = ({ currentLiveItem }) => {
     }
   }, [currentLiveItem])
 
+  const handlePlayPause = () => {
+    if (soundInstance) {
+      if (volume > 0) {
+        setVolume(0) // Çalma sırasında sesi sıfırla
+      } else {
+        setVolume(0.2) // Tekrar başlatıldığında sesi eski seviyeye getir
+      }
+      setIsPlaying(!isPlaying) // Durum değişikliğini takip et
+    }
+  }
+
   useEffect(() => {
     if (soundInstance) {
-      soundInstance.volume(volume)
+      soundInstance.volume(volume) // Ses seviyesini anlık olarak güncelle
     }
   }, [volume])
 
-  const handlePlayPause = () => {
-    setVolume(0)
-    if (soundInstance) {
-      if (isPlaying) {
-        soundInstance.pause()
-      } else {
-        soundInstance.play()
-      }
-    }
-  }
+  useEffect(() => {
+    // localStorage'a oynatma durumu kaydet
+    localStorage.setItem('isPlaying', JSON.stringify(isPlaying))
+    localStorage.setItem('volume', volume.toString())
+    localStorage.setItem('currentTime', currentTime.toString())
+  }, [isPlaying, volume, currentTime])
 
   useEffect(() => {
     if (soundInstance) {
@@ -107,7 +105,6 @@ const PlayerBar = ({ currentLiveItem }) => {
     if (soundInstance) {
       const currentSeekTime = soundInstance.seek() * 1000
       setCurrentTime(currentSeekTime)
-
       if (soundInstance.playing()) {
         requestAnimationFrame(updateCurrentTime)
       }
@@ -144,7 +141,7 @@ const PlayerBar = ({ currentLiveItem }) => {
         padding: '16px 24px',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         borderRadius: '16px',
-        width: '700px',
+        width: 'fit-content',
         position: 'fixed',
         bottom: 30,
         margin: 'auto'
@@ -208,7 +205,7 @@ const PlayerBar = ({ currentLiveItem }) => {
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <IconButton onClick={() => handlePlayPause()}>
-          {isPlaying ? (
+          {volume > 0 ? (
             <PauseIcon sx={{ color: '#fff', fontSize: '13px' }} />
           ) : (
             <PlayArrowIcon sx={{ color: '#fff', fontSize: '13px' }} />
