@@ -81,110 +81,122 @@ export default function LoginView({ searchParams }) {
       }}
     >
       <Box sx={{ width: '40%' }}>
-        <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-          <Card
-            sx={{
-              backgroundColor: 'transparent',
-              boxShadow: 'none',
-              p: 5,
-              width: 1,
-              maxWidth: 420
-            }}
-          >
-            <Logo width="40%" />
+        <Stack
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ height: 1, width: '100%' }}
+        >
+          <Logo width="40%" />
 
-            {show && (
-              <Alert severity="error" style={{ marginBottom: 16 }}>
-                Sistemde böyle bir kullanıcı bulunamamaktadır. Lütfen şifrenizi ve mail adresinizi
-                tekrar kontrol eder misiniz?.
-              </Alert>
-            )}
+          {show && (
+            <Alert severity="error" style={{ marginBottom: 16 }}>
+              Sistemde böyle bir kullanıcı bulunamamaktadır. Lütfen şifrenizi ve mail adresinizi
+              tekrar kontrol eder misiniz?.
+            </Alert>
+          )}
 
-            <form onSubmit={formik.handleSubmit}>
-              <Stack spacing={3} mb={3}>
-                <Stack spacing={1}>
-                  <Typography variant="body1" style={{ opacity: 0.8 }}>
-                    Mail Adresiniz
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    id="email"
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
-                  />
-                </Stack>
-                <Stack spacing={1}>
-                  <Typography variant="body1" style={{ opacity: 0.8 }}>
-                    Şifre
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    id="password"
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    error={formik.touched.password && Boolean(formik.errors.password)}
-                    helperText={formik.touched.password && formik.errors.password}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                            <Icon icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </Stack>
-
-                <FormControlLabel
-                  control={<Checkbox name="rememberMe" color="primary" />}
-                  label="Beni Hatırla"
-                />
-              </Stack>
-
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="flex-end"
-                sx={{ my: 3, display: 'none' }}
-              >
-                <Link variant="subtitle2" underline="hover">
-                  Forgot password?
-                </Link>
-              </Stack>
-
+          <form onSubmit={formik.handleSubmit}>
+            <Stack
+              spacing={3}
+              mt={3}
+              mb={1}
+              sx={{
+                paddingBlock: '30px'
+              }}
+            >
+              <TextField
+                fullWidth
+                id="email"
+                name="email"
+                placeholder="Mail Adresiniz"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    width: 350,
+                    height: '50px',
+                    fontSize: '14px',
+                    borderRadius: '30px',
+                    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+                    backgroundColor: '#f7f8fc'
+                  }
+                }}
+              />
+              <TextField
+                fullWidth
+                id="password"
+                name="password"
+                placeholder="Şifre"
+                type={showPassword ? 'text' : 'password'}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                helperText={formik.touched.password && formik.errors.password}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        <Icon icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    height: '50px',
+                    fontSize: '14px',
+                    borderRadius: '30px',
+                    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+                    backgroundColor: '#f7f8fc'
+                  }
+                }}
+              />
               <Button
                 fullWidth
-                size="large"
                 type="submit"
                 variant="contained"
                 color="primary"
                 disabled={formik.isSubmitting}
+                sx={{
+                  height: '50px',
+                  borderRadius: '30px',
+                  fontSize: '16px',
+                  textTransform: 'none',
+                  backgroundColor: '#397ae0',
+                  '&:hover': {
+                    backgroundColor: '#1f4cb3'
+                  }
+                }}
               >
                 GİRİŞ YAP
               </Button>
-            </form>
+            </Stack>
 
-            {searchParams?.message && (
-              <Typography
-                variant="body2"
-                sx={{
-                  mt: 4,
-                  p: 2,
-                  textAlign: 'center',
-                  backgroundColor: alpha(theme.palette.error.main, 0.1),
-                  color: theme.palette.error.main
-                }}
-              >
-                {searchParams.message}
+            <Stack direction="row" alignItems="center" justifyContent="flex-end">
+              <Typography variant="caption" underline="hover" color="black">
+                Forgot password?
               </Typography>
-            )}
-            {/* 
+            </Stack>
+          </form>
+
+          {searchParams?.message && (
+            <Typography
+              variant="body2"
+              sx={{
+                mt: 4,
+                p: 2,
+                textAlign: 'center',
+                backgroundColor: alpha(theme.palette.error.main, 0.1),
+                color: theme.palette.error.main
+              }}
+            >
+              {searchParams.message}
+            </Typography>
+          )}
+          {/* 
             <Divider sx={{ my: 3 }}>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 VEYA
@@ -221,7 +233,6 @@ export default function LoginView({ searchParams }) {
                 <Icon icon="eva:twitter-fill" color="#1C9CEA" />
               </Button>
             </Stack> */}
-          </Card>
         </Stack>
       </Box>
       <Card
@@ -235,13 +246,30 @@ export default function LoginView({ searchParams }) {
           backgroundRepeat: 'no-repeat',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center'
+          justifyContent: 'flex-end',
+          alignItems: 'flex-end'
         }}
       >
-        <Typography variant="h4">Yapay Zeka ile İşletme Müziğinin Büyüsüne Hoş Geldiniz</Typography>
-        <Typography variant="h4">İşletme İçi Müzik Yayıncılığında 20 Yıllık Lider</Typography>
-        <Typography variant="h4">RTP Medya & AI Music</Typography>
+        <Box
+          sx={{
+            margin: '0px 20px 32px 0px',
+            textAlign: 'right',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            color: 'white'
+          }}
+        >
+          <Typography variant="h5" fontWeight={700} width={400}>
+            Yapay Zeka ile İşletme Müziğinin Büyüsüne Hoş Geldiniz.
+          </Typography>
+          <Typography variant="caption">
+            İşletme İçi Müzik Yayıncılığında 20 Yıllık Lider
+          </Typography>
+          <Typography variant="body2" fontWeight={600}>
+            RTP Medya & AI Music
+          </Typography>
+        </Box>
       </Card>
     </Box>
   )

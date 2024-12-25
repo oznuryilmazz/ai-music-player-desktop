@@ -84,14 +84,13 @@ export default function MusicList() {
     }
   }
 
-  // Şarkı süresi bitince listeyi yenile
   useEffect(() => {
     if (currentLiveItem) {
       const remainingTime =
         currentLiveItem.startTime + currentLiveItem.duration - getCurrentTimeInMilliseconds()
 
       const timeout = setTimeout(() => {
-        getTimeline() // Listeyi yeniden yükle
+        getTimeline() 
       }, remainingTime)
 
       return () => clearTimeout(timeout)
