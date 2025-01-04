@@ -45,7 +45,7 @@ const Sidebar = () => {
       }}
     >
       <Box>
-        <IconButton onClick={() => handleNavigation('/login')} title="Account">
+        <IconButton onClick={() => handleNavigation('/')} title="Account">
           <img src={logo} alt="Amblem AI" style={{ width: '70%' }} />
         </IconButton>
       </Box>
