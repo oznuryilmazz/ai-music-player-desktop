@@ -2,6 +2,7 @@ import { app, BrowserWindow, session } from 'electron'
 import { join } from 'path'
 import { electronApp, is } from '@electron-toolkit/utils'
 import { supabase } from '../renderer/services/supabase/client'
+import AutoLaunch from 'auto-launch'
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -60,8 +61,24 @@ supabase.auth.onAuthStateChange((event, session) => {
   }
 })
 
+const appAutoLauncher = new AutoLaunch({
+  name: 'AI Music Player',
+  path: process.execPath
+})
+
+appAutoLauncher
+  .isEnabled()
+  .then((isEnabled) => {
+    if (!isEnabled) {
+      appAutoLauncher.enable()
+    }
+  })
+  .catch((error) => {
+    console.error('Failed to enable auto-launch:', error)
+  })
+
 app.whenReady().then(() => {
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.example.aimusicplayer')
 
   createWindow()
 

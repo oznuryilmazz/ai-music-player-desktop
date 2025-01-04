@@ -28,6 +28,7 @@
     "@mui/material": "^6.2.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.47.8",
+    "auto-launch": "^5.0.6",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "electron-updater": "^6.1.7",
