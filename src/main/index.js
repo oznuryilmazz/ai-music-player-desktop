@@ -1,9 +1,7 @@
 import { app, BrowserWindow, session } from 'electron'
 import { join } from 'path'
 import { electronApp, is } from '@electron-toolkit/utils'
-import { createClient } from '../renderer/services/supabase/client'
-
-const supabase = createClient()
+import { supabase } from '../renderer/services/supabase/client'
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -22,8 +20,8 @@ function createWindow() {
     mainWindow.show()
   })
 
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  if (is.dev && import.meta.env['ELECTRON_RENDERER_URL']) {
+    mainWindow.loadURL(import.meta.env['ELECTRON_RENDERER_URL'])
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }

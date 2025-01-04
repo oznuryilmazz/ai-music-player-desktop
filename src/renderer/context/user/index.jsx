@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { createClient } from '../../services/supabase/client'
+import { supabase } from '../../services/supabase/client'
 import { getUser } from '../../../api/users'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,7 +8,6 @@ const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const supabase = createClient()
   const navigate = useNavigate()
 
   useEffect(() => {

@@ -11,13 +11,11 @@ import LogoutIcon from '@mui/icons-material/Logout'
 
 import logo from '../../../../resources/amblem-ai.png'
 import { useUser } from '../../context/user'
-import { createClient } from '../../services/supabase/client'
+import { supabase } from '../../services/supabase/client'
 
 const Sidebar = () => {
   const navigate = useNavigate()
   const { user, setUser } = useUser()
-  const supabase = createClient()
-
   console.log('user', user)
 
   const handleNavigation = (route) => {

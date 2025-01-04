@@ -8,13 +8,11 @@ import dayjs from 'dayjs'
 
 import imgBg from '../../../../resources/ai-logo.jpg'
 import { TimelineManager } from '../../services/TimelineManager'
-import { createClient } from '../../services/supabase/client'
+import { supabase } from '../../services/supabase/client'
 import PlayerBar from '../Player/Index'
 import { useUser } from '../../context/user'
 import { listUser } from '../../../api/users'
 import { getCurrentTimeInMilliseconds, getStatus } from '../../services/utils/timeline'
-
-const supabase = createClient()
 
 export default function MusicList() {
   const [timeline, setTimeline] = useState([])

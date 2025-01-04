@@ -13,12 +13,10 @@
     "build": "electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
-  "build:win": "electron-builder --win",
-  "build:mac": "electron-builder --mac",
-  "build:linux": "electron-builder --linux",
-  "build:all": "electron-builder"
-
-
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
@@ -31,6 +29,7 @@
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.47.8",
     "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
     "electron-updater": "^6.1.7",
     "formik": "^2.4.6",
     "howler": "^2.2.4",
@@ -53,5 +52,27 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "vite": "^5.3.1"
+  },
+  "build": {
+    "appId": "com.example.aimusicplayer",
+    "productName": "AI Music Player",
+    "directories": {
+      "buildResources": "resources"
+    },
+    "win": {
+      "icon": "resources/icon.ico"
+    },
+    "mac": {
+      "icon": "resources/icon.icns"
+    },
+    "linux": {
+      "icon": "resources/icon.png"
+    },
+    "extraResources": [
+      {
+        "from": "./.env",
+        "to": ".env"
+      }
+    ]
   }
 }

@@ -1,26 +1,9 @@
-import { cookies } from 'next/headers'
+// src/lib/server.js
+import { createClient } from '@supabase/supabase-js'
 
-import { createServerClient } from '@supabase/ssr'
+// Supabase URL ve Servis Role Key (Environment Variables kullanın)
+const SUPABASE_URL = import.meta.env.VITE_PUBLIC_SUPABASE_URL
+const SUPABASE_SERVICE_ROLE_KEY = import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY
 
-export function createClient() {
-  const cookieStore = cookies()
-
-  return createServerClient(
-    import.meta.env.VITE_PUBLIC_SUPABASE_URL,
-    import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {}
-        }
-      }
-    }
-  )
-}
+// Sunucu tarafı Supabase istemcisini oluşturun
+export const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)

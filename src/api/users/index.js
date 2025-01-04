@@ -1,9 +1,7 @@
 // api.js
 
-import { createClient } from '../../renderer/services/supabase/client'
+import { supabase } from '../../renderer/services/supabase/client'
 import { FunctionsFetchError, FunctionsHttpError, FunctionsRelayError } from '@supabase/supabase-js'
-
-const supabase = createClient()
 
 export async function listUser() {
   try {

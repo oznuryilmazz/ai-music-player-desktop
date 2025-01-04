@@ -1,38 +1,18 @@
-import { NextResponse } from 'next/server'
+import { supabase } from './client'
 
-import { createServerClient } from '@supabase/ssr'
+export const verifyUser = async (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1]
 
-export async function updateSession(request) {
-  let supabaseResponse = NextResponse.next({
-    request
-  })
+  if (!token) {
+    return res.status(401).send('Authorization token missing')
+  }
 
-  const supabase = createServerClient(
-    import.meta.env.VITE_PUBLIC_SUPABASE_URL,
-    import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({
-            request
-          })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        }
-      }
-    }
-  )
+  const { data: user, error } = await supabase.auth.getUser(token)
 
-  // Always use supabase.auth.getUser() to protect pages and user data.
-  // Never trust supabase.auth.getSession() inside server code such as middleware. It isn't guaranteed to revalidate the Auth token.
+  if (error || !user) {
+    return res.status(401).send('Unauthorized')
+  }
 
-  // refreshing the auth token
-  await supabase.auth.getUser()
-
-  return supabaseResponse
+  req.user = user
+  next()
 }
