@@ -5,6 +5,7 @@ import PauseIcon from '@mui/icons-material/Pause'
 import { Howl } from 'howler'
 import AudioWaveform from '../audio-wave'
 import { getCurrentTimeInMilliseconds } from '../../services/utils/timeline'
+import { useLocation } from 'react-router-dom'
 
 const PlayerBar = ({ currentLiveItem }) => {
   const [isPlaying, setIsPlaying] = useState(JSON.parse(localStorage.getItem('isPlaying')) || false)
@@ -14,6 +15,8 @@ const PlayerBar = ({ currentLiveItem }) => {
     parseFloat(localStorage.getItem('currentTime')) || 0
   )
   const [duration, setDuration] = useState(0)
+
+  const location = useLocation()
 
   useEffect(() => {
     if (soundInstance && currentLiveItem) {
@@ -82,6 +85,15 @@ const PlayerBar = ({ currentLiveItem }) => {
       soundInstance.volume(volume) // Ses seviyesini anlık olarak güncelle
     }
   }, [volume])
+
+  useEffect(() => {
+    if (soundInstance) {
+      soundInstance.stop()
+      soundInstance.unload()
+      setSoundInstance(null)
+      setIsPlaying(false)
+    }
+  }, [location])
 
   useEffect(() => {
     // localStorage'a oynatma durumu kaydet
