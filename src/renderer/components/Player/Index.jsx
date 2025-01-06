@@ -86,14 +86,14 @@ const PlayerBar = ({ currentLiveItem }) => {
     }
   }, [volume])
 
-  useEffect(() => {
-    if (soundInstance) {
-      soundInstance.stop()
-      soundInstance.unload()
-      setSoundInstance(null)
-      setIsPlaying(false)
-    }
-  }, [location])
+  // useEffect(() => {
+  //   if (soundInstance) {
+  //     soundInstance.stop()
+  //     soundInstance.unload()
+  //     setSoundInstance(null)
+  //     setIsPlaying(false)
+  //   }
+  // }, [location])
 
   useEffect(() => {
     // localStorage'a oynatma durumu kaydet

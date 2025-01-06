@@ -135,7 +135,7 @@ export default function MusicList() {
         </Box>
       ))}
     </Box>
-  ) : timeline.length > 0 ? (
+  ) : filteredTimeline.length > 0 ? (
     <Box
       sx={{
         width: '100%',
