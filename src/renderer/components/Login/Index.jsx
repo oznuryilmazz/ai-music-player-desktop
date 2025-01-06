@@ -139,7 +139,7 @@ export default function LoginView({ searchParams }) {
                       <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                         <Icon
                           icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'}
-                          color="#00000050"
+                          color="#00000080"
                         />
                       </IconButton>
                     </InputAdornment>
@@ -247,13 +247,13 @@ export default function LoginView({ searchParams }) {
           backgroundRepeat: 'no-repeat',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end',
+          justifyContent: 'center',
           alignItems: 'flex-end'
         }}
       >
         <Box
           sx={{
-            margin: '0px 20px 32px 0px',
+            margin: '0px 32px 0px 0px',
             textAlign: 'right',
             display: 'flex',
             flexDirection: 'column',
@@ -261,13 +261,13 @@ export default function LoginView({ searchParams }) {
             color: 'white'
           }}
         >
-          <Typography fontSize={40} fontWeight={700} width={400}>
+          <Typography fontSize={40} fontWeight={700} width={750}>
             Yapay Zeka ile İşletme Müziğinin Büyüsüne Hoş Geldiniz.
           </Typography>
-          <Typography variant="caption">
+          <Typography variant="caption" fontSize={18}>
             İşletme İçi Müzik Yayıncılığında 20 Yıllık Lider
           </Typography>
-          <Typography variant="body2" fontWeight={600}>
+          <Typography variant="body2" fontWeight={600} fontSize={15}>
             RTP Medya & AI Music
           </Typography>
         </Box>
