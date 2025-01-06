@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, Avatar, IconButton, Skeleton } from '@mui/material'
+import { Box, Typography, Avatar, IconButton, Skeleton, Button } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -76,6 +76,8 @@ export default function MusicList() {
     }
   }
 
+  console.log('users', users)
+
   useEffect(() => {
     if (currentLiveItem) {
       const remainingTime =
@@ -101,7 +103,7 @@ export default function MusicList() {
     getTimeline()
   }, [selectedDate, users])
 
-  return (
+  return timeline.length > 0 ? (
     <Box
       sx={{
         width: '100%',
@@ -121,11 +123,15 @@ export default function MusicList() {
             marginBottom: 4
           }}
         >
-          <Typography
-            variant="h4"
-            sx={{ fontFamily: 'Rubik', fontWeight: 600, color: 'rgb(41, 42, 51)' }}
-          >
-            Canlı Akış
+          <Typography variant="h6" sx={{ fontWeight: 700, color: 'rgb(41, 42, 51)' }}>
+            {user?.role === 'admin'
+              ? 'Novada Edremit Avm'
+              : user?.role === 'branch'
+                ? `${user?.parent?.name} - ${user?.name}`
+                : user?.role === 'partner'
+                  ? `${users[0]?.parent?.name} - ${users[0]?.name}`
+                  : null}{' '}
+            Canlı Yayını
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
@@ -251,6 +257,59 @@ export default function MusicList() {
       </Box>
 
       <PlayerBar currentLiveItem={currentLiveItem} />
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        color: 'black'
+      }}
+    >
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 'bold',
+          mb: 2
+        }}
+      >
+        🎶🎧 Henüz bir timeline tanımlanmamış! Burada yakında müzik dolu listelerinizi
+        görebileceksiniz! 🎸🎷
+      </Typography>
+      <Typography
+        variant="h6"
+        sx={{
+          fontWeight: '300',
+          fontSize: '1.2rem',
+          mb: 4
+        }}
+      >
+        Yeni deneyimler ve fırsatlarla geliyoruz! Bizi takipte kalın.
+      </Typography>
+      <Button
+        variant="contained"
+        size="large"
+        sx={{
+          background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+          borderRadius: '30px',
+          padding: '10px 30px',
+          fontSize: '1rem',
+          fontWeight: 'bold',
+          textTransform: 'none',
+          '&:hover': {
+            background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)'
+          }
+        }}
+        onClick={() => {
+          alert('Takipte kalın!')
+        }}
+      >
+        Takipte Kalın
+      </Button>
     </Box>
   )
 }

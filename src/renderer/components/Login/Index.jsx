@@ -6,12 +6,8 @@ import {
   Box,
   Button,
   Card,
-  Checkbox,
-  Divider,
-  FormControlLabel,
   IconButton,
   InputAdornment,
-  Link,
   Stack,
   TextField,
   Typography
@@ -20,9 +16,10 @@ import { alpha, useTheme } from '@mui/material/styles'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import aiAmblem from '../../../../resources/ai-music-logo.png'
+
 import { useUser } from '../../context/user'
 import { signIn } from '../../../api/auth/signin'
-import Logo from '../Logo/Index'
 import { useNavigate } from 'react-router-dom'
 import { getUser } from '../../../api/users'
 
@@ -62,9 +59,9 @@ export default function LoginView({ searchParams }) {
         }
       } catch (error) {
         console.error('Giriş işlemi başarısız:', error)
-        setShow(true) // API çağrısı hata aldıysa kullanıcıya göster
+        setShow(true)
       } finally {
-        setSubmitting(false) // Butonu tekrar aktif hale getir
+        setSubmitting(false)
       }
     }
   })
@@ -88,7 +85,7 @@ export default function LoginView({ searchParams }) {
           justifyContent="center"
           sx={{ height: 1, width: '100%' }}
         >
-          <Logo width="40%" />
+          <img src={aiAmblem} width="60%" />
 
           {show && (
             <Alert severity="error" style={{ marginBottom: 16 }}>
@@ -140,7 +137,10 @@ export default function LoginView({ searchParams }) {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                        <Icon icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                        <Icon
+                          icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'}
+                          color="#00000050"
+                        />
                       </IconButton>
                     </InputAdornment>
                   )
@@ -175,12 +175,12 @@ export default function LoginView({ searchParams }) {
                 GİRİŞ YAP
               </Button>
             </Stack>
-
+            {/* 
             <Stack direction="row" alignItems="center" justifyContent="flex-end">
               <Typography variant="caption" underline="hover" color="black">
                 Forgot password?
               </Typography>
-            </Stack>
+            </Stack> */}
           </form>
 
           {searchParams?.message && (
@@ -261,7 +261,7 @@ export default function LoginView({ searchParams }) {
             color: 'white'
           }}
         >
-          <Typography variant="h5" fontWeight={700} width={400}>
+          <Typography fontSize={40} fontWeight={700} width={400}>
             Yapay Zeka ile İşletme Müziğinin Büyüsüne Hoş Geldiniz.
           </Typography>
           <Typography variant="caption">

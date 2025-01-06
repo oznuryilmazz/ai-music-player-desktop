@@ -1,6 +1,6 @@
 # ai-music-player-desktop
 
-An Electron application with React
+Müziğin hep elinin altında, AI Music’le her yerden kolayca ayarla!
 
 ## Recommended IDE Setup
 

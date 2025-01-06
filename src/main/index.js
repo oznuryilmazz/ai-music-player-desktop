@@ -6,8 +6,10 @@ import AutoLaunch from 'auto-launch'
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1200,
+    height: 720,
+    minWidth: 1200,
+    minHeight: 720,
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
@@ -19,6 +21,8 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+
+    mainWindow.webContents.openDevTools()
   })
 
   if (is.dev && import.meta.env['ELECTRON_RENDERER_URL']) {
