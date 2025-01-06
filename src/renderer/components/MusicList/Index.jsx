@@ -103,7 +103,39 @@ export default function MusicList() {
     getTimeline()
   }, [selectedDate, users])
 
-  return timeline.length > 0 ? (
+  return loading ? (
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 3
+      }}
+    >
+      {Array.from(new Array(5)).map((_, index) => (
+        <Box
+          key={index}
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 2,
+            gap: 2
+          }}
+        >
+          <Skeleton variant="text" width={30} />
+          <Skeleton variant="rectangular" width={56} height={56} />
+          <Box sx={{ flex: 1, marginLeft: 2 }}>
+            <Skeleton variant="text" width="100%" />
+            <Skeleton variant="text" width="60%" />
+          </Box>
+        </Box>
+      ))}
+    </Box>
+  ) : timeline.length > 0 ? (
     <Box
       sx={{
         width: '100%',
@@ -144,118 +176,93 @@ export default function MusicList() {
         </Box>
 
         <Box sx={{ marginTop: 4 }}>
-          {loading ? (
-            // Skeleton Loader
-            Array.from(new Array(5)).map((_, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 2
-                }}
-              >
-                <Skeleton variant="text" width={30} />
-                <Skeleton variant="rectangular" width={56} height={56} />
-                <Box sx={{ flex: 1, marginLeft: 2 }}>
-                  <Skeleton variant="text" width="80%" />
-                  <Skeleton variant="text" width="60%" />
-                </Box>
-              </Box>
-            ))
-          ) : filteredTimeline.length > 0 ? (
-            filteredTimeline.map((song, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 2
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
-                  <Typography
-                    color="rgb(205, 211, 221)"
-                    fontWeight={600}
-                    sx={{ width: '30px', textAlign: 'center' }}
-                  >
-                    {index < 9 ? `0${index + 1}` : index + 1}
-                  </Typography>
-                  <Avatar
-                    variant="square"
-                    sx={{ width: 56, height: 56, backgroundColor: 'transparent' }}
-                  >
-                    <img
-                      src={
-                        song?.song?.albums?.cover_url ||
-                        song?.stockAd?.cover_url ||
-                        song?.specialAd?.cover_url ||
-                        imgBg
-                      }
-                      alt="album cover"
-                      style={{
-                        width: '100%',
-                        height: 'auto',
-                        borderRadius: 16,
-                        maxHeight: 350
-                      }}
-                    />
-                  </Avatar>
-                  <Box sx={{ flex: 1 }}>
-                    <Typography
-                      sx={{
-                        fontWeight: 600,
-                        color: 'rgb(41, 42, 51)',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis'
-                      }}
-                    >
-                      {song?.[song?.type]?.name}
-                    </Typography>
-                    <Typography variant="caption" color="rgb(205, 211, 221)">
-                      AI Music Bank
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Süre */}
-                <Box
-                  sx={{
-                    width: '150px',
-                    textAlign: 'center',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 1
-                  }}
+          {filteredTimeline.map((song, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 2
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
+                <Typography
+                  color="rgb(205, 211, 221)"
+                  fontWeight={600}
+                  sx={{ width: '30px', textAlign: 'center' }}
                 >
-                  <Typography color="rgb(103, 103, 103)" fontSize="12px">
-                    {formatTime(song?.startTime)}
+                  {index < 9 ? `0${index + 1}` : index + 1}
+                </Typography>
+                <Avatar
+                  variant="square"
+                  sx={{ width: 56, height: 56, backgroundColor: 'transparent' }}
+                >
+                  <img
+                    src={
+                      song?.song?.albums?.cover_url ||
+                      song?.stockAd?.cover_url ||
+                      song?.specialAd?.cover_url ||
+                      imgBg
+                    }
+                    alt="album cover"
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      borderRadius: 16,
+                      maxHeight: 350
+                    }}
+                  />
+                </Avatar>
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: 'rgb(41, 42, 51)',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
+                    {song?.[song?.type]?.name}
                   </Typography>
-                  <Typography color="rgb(103, 103, 103)" fontSize="12px">
-                    {formatTime(song?.startTime + song?.duration)}
+                  <Typography variant="caption" color="rgb(205, 211, 221)">
+                    AI Music Bank
                   </Typography>
-                </Box>
-
-                {/* Aksiyon İkonları */}
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                  <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
-                    <FavoriteBorderIcon sx={{ fontSize: '13px' }} />
-                  </IconButton>
-                  <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
-                    <MoreVertIcon sx={{ fontSize: '13px' }} />
-                  </IconButton>
                 </Box>
               </Box>
-            ))
-          ) : (
-            <Typography>No data available</Typography>
-          )}
+
+              {/* Süre */}
+              <Box
+                sx={{
+                  width: '150px',
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 1
+                }}
+              >
+                <Typography color="rgb(103, 103, 103)" fontSize="12px">
+                  {formatTime(song?.startTime)}
+                </Typography>
+                <Typography color="rgb(103, 103, 103)" fontSize="12px">
+                  {formatTime(song?.startTime + song?.duration)}
+                </Typography>
+              </Box>
+
+              {/* Aksiyon İkonları */}
+              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
+                  <FavoriteBorderIcon sx={{ fontSize: '13px' }} />
+                </IconButton>
+                <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
+                  <MoreVertIcon sx={{ fontSize: '13px' }} />
+                </IconButton>
+              </Box>
+            </Box>
+          ))}
         </Box>
       </Box>
-
       <PlayerBar currentLiveItem={currentLiveItem} />
     </Box>
   ) : (

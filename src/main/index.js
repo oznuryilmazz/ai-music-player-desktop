@@ -6,10 +6,8 @@ import AutoLaunch from 'auto-launch'
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 720,
-    minWidth: 1200,
-    minHeight: 720,
+    width: 1500,
+    height: 850,
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
