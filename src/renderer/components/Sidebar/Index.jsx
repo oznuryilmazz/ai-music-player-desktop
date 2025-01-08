@@ -45,26 +45,26 @@ const Sidebar = () => {
       }}
     >
       <Box>
-        <IconButton onClick={() => handleNavigation('/')} title="Account">
+        <IconButton onClick={() => handleNavigation('/')} title="Ai Music">
           <img src={logo} alt="Amblem AI" style={{ width: '70%' }} />
         </IconButton>
       </Box>
 
       <Stack spacing={2} alignItems="center">
-        <IconButton onClick={() => handleNavigation('/')} title="Home">
+        <IconButton onClick={() => handleNavigation('/')} title="Canlı Yayın">
           <HomeIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
         </IconButton>
-        <IconButton onClick={() => handleNavigation('/music')} title="Music">
+        <IconButton onClick={() => handleNavigation('/music')} title="Müzikler">
           <MusicNoteIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
         </IconButton>
         <Divider sx={{ width: '70%', bgcolor: '#ffffff40' }} />
-        <IconButton onClick={() => handleNavigation('/favorites')} title="Favorites">
+        <IconButton onClick={() => handleNavigation('/favorites')} title="Favorilerim">
           <FavoriteIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
         </IconButton>
-        <IconButton onClick={() => handleNavigation('/library')} title="Library">
+        <IconButton onClick={() => handleNavigation('/library')} title="Playlist">
           <LibraryMusicIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
         </IconButton>
-        <IconButton onClick={() => handleNavigation('/settings')} title="Settings">
+        <IconButton onClick={() => handleNavigation('/settings')} title="Ayarlar">
           <SettingsIcon sx={{ fontSize: '18px', color: '#ffffff' }} />
         </IconButton>
       </Stack>
@@ -72,7 +72,7 @@ const Sidebar = () => {
       <Box>
         <IconButton
           onClick={() => (user?.id ? handleLogout() : handleNavigation('/login'))}
-          title="Account"
+          title="Çıkış Yap"
         >
           {user?.id ? (
             <LogoutIcon sx={{ fontSize: '18px', color: '#d8d8f6' }} />

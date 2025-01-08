@@ -13,10 +13,11 @@ import PlayerBar from '../Player/Index'
 import { useUser } from '../../context/user'
 import { listUser } from '../../../api/users'
 import { getCurrentTimeInMilliseconds, getStatus } from '../../services/utils/timeline'
+import NoDataTimeline from '../no-data-timeline'
+import MusicListSkeleton from '../skeletons/music-list'
 
 export default function MusicList() {
   const [timeline, setTimeline] = useState([])
-  const [filteredTimeline, setFilteredTimeline] = useState([])
   const [users, setUsers] = useState([])
   const [selectedDate, setSelectedDate] = useState(dayjs())
   const [loading, setLoading] = useState(true)
@@ -26,10 +27,6 @@ export default function MusicList() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await listUser()
-      console.log(
-        'data',
-        data?.data.filter((user) => user.role === 'branch')
-      )
       setUsers(data?.data.filter((user) => user.role === 'branch'))
     }
 
@@ -65,77 +62,57 @@ export default function MusicList() {
       )
 
       setTimeline(filteredTimeline)
-      setFilteredTimeline(filteredTimeline)
 
-      const liveItem = filteredTimeline.find((item) => getStatus(item, selectedDate) === 'yayında')
-      setCurrentLiveItem(liveItem || null)
+      setCurrentLiveItem(
+        filteredTimeline.find((item) => getStatus(item, selectedDate) === 'yayında') || null
+      )
     } catch (error) {
       console.error('Error fetching timeline:', error)
     } finally {
+      console.log('timeline', timeline)
       setLoading(false)
     }
   }
 
-  console.log('users', users)
-
   useEffect(() => {
-    if (currentLiveItem) {
-      const remainingTime =
-        currentLiveItem.startTime + currentLiveItem.duration - getCurrentTimeInMilliseconds()
+    if (timeline.length > 0) {
+      const currentIndex = timeline.findIndex((item) => getStatus(item, selectedDate) === 'yayında')
 
-      const timeout = setTimeout(() => {
-        const currentIndex = timeline.findIndex(
-          (item) => item.startTime === currentLiveItem.startTime
-        )
+      if (currentIndex !== -1) {
+        const currentSong = timeline[currentIndex]
 
-        if (currentIndex + 1 < timeline.length) {
-          setCurrentLiveItem(timeline[currentIndex + 1]) // Bir sonraki şarkıya geçiş
-        } else {
-          setCurrentLiveItem(null) // Liste sonuna ulaşıldığında
-        }
-      }, remainingTime)
+        setCurrentLiveItem(currentSong)
+        const remainingTime =
+          currentSong.startTime + currentSong.duration - getCurrentTimeInMilliseconds()
 
-      return () => clearTimeout(timeout)
+        const timeout = setTimeout(() => {
+          const nextIndex = currentIndex + 1
+
+          if (nextIndex < timeline.length) {
+            const updatedTimeline = timeline.filter((item, index) => {
+              const status = getStatus(item, selectedDate)
+              return status === 'yayında' || (status === 'yayınlanacak' && index > currentIndex)
+            })
+
+            setTimeline(updatedTimeline)
+          } else {
+            const finalTimeline = timeline.filter(
+              (item) => getStatus(item, selectedDate) === 'yayınlanacak'
+            )
+            setTimeline(finalTimeline)
+          }
+        }, remainingTime)
+
+        return () => clearTimeout(timeout)
+      }
     }
-  }, [currentLiveItem, timeline])
+  }, [timeline, selectedDate])
 
   useEffect(() => {
     getTimeline()
   }, [selectedDate, users])
 
-  return loading ? (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 3
-      }}
-    >
-      {Array.from(new Array(5)).map((_, index) => (
-        <Box
-          key={index}
-          sx={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 2,
-            gap: 2
-          }}
-        >
-          <Skeleton variant="text" width={30} />
-          <Skeleton variant="rectangular" width={56} height={56} />
-          <Box sx={{ flex: 1, marginLeft: 2 }}>
-            <Skeleton variant="text" width="100%" />
-            <Skeleton variant="text" width="60%" />
-          </Box>
-        </Box>
-      ))}
-    </Box>
-  ) : filteredTimeline.length > 0 ? (
+  return (loading && <MusicListSkeleton />) || timeline.length > 0 ? (
     <Box
       sx={{
         width: '100%',
@@ -146,7 +123,6 @@ export default function MusicList() {
       }}
     >
       <Box sx={{ padding: 3, width: '100%' }}>
-        {/* Header */}
         <Box
           sx={{
             display: 'flex',
@@ -176,7 +152,7 @@ export default function MusicList() {
         </Box>
 
         <Box sx={{ marginTop: 4 }}>
-          {filteredTimeline.map((song, index) => (
+          {timeline.map((song, index) => (
             <Box
               key={index}
               sx={{
@@ -266,57 +242,6 @@ export default function MusicList() {
       <PlayerBar currentLiveItem={currentLiveItem} />
     </Box>
   ) : (
-    <Box
-      sx={{
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        color: 'black'
-      }}
-    >
-      <Typography
-        variant="h5"
-        sx={{
-          fontWeight: 'bold',
-          mb: 2
-        }}
-      >
-        🎶🎧 Henüz bir timeline tanımlanmamış! Burada yakında müzik dolu listelerinizi
-        görebileceksiniz! 🎸🎷
-      </Typography>
-      <Typography
-        variant="h6"
-        sx={{
-          fontWeight: '300',
-          fontSize: '1.2rem',
-          mb: 4
-        }}
-      >
-        Yeni deneyimler ve fırsatlarla geliyoruz! Bizi takipte kalın.
-      </Typography>
-      <Button
-        variant="contained"
-        size="large"
-        sx={{
-          background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-          borderRadius: '30px',
-          padding: '10px 30px',
-          fontSize: '1rem',
-          fontWeight: 'bold',
-          textTransform: 'none',
-          '&:hover': {
-            background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)'
-          }
-        }}
-        onClick={() => {
-          alert('Takipte kalın!')
-        }}
-      >
-        Takipte Kalın
-      </Button>
-    </Box>
+    <NoDataTimeline />
   )
 }
