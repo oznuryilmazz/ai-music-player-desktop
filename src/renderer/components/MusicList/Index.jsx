@@ -1,116 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Typography, Avatar, IconButton, Skeleton, Button } from '@mui/material'
+import { Box, Typography, Avatar, IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import dayjs from 'dayjs'
 
 import imgBg from '../../../../resources/ai-logo.jpg'
-import { TimelineManager } from '../../services/TimelineManager'
-import { supabase } from '../../services/supabase/client'
-import PlayerBar from '../Player/Index'
-import { useUser } from '../../context/user'
-import { listUser } from '../../../api/users'
-import { getCurrentTimeInMilliseconds, getStatus } from '../../services/utils/timeline'
 import NoDataTimeline from '../no-data-timeline'
 import MusicListSkeleton from '../skeletons/music-list'
+import { useTimeline } from '../../context/timeline'
+import { useUser } from '../../context/user'
 
 export default function MusicList() {
-  const [timeline, setTimeline] = useState([])
-  const [users, setUsers] = useState([])
-  const [selectedDate, setSelectedDate] = useState(dayjs())
-  const [loading, setLoading] = useState(true)
-  const [currentLiveItem, setCurrentLiveItem] = useState(null)
+  const { timeline, loading } = useTimeline()
+
   const { user } = useUser()
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await listUser()
-      setUsers(data?.data.filter((user) => user.role === 'branch'))
-    }
-
-    fetchData()
-  }, [])
 
   const formatTime = (milliseconds) => {
     const date = new Date(milliseconds)
     return date.toISOString().substr(11, 8)
   }
-
-  const getTimeline = async () => {
-    setLoading(true)
-    try {
-      const timelineManager = new TimelineManager({
-        client: supabase,
-        userId:
-          user?.role === 'admin'
-            ? '783916fd-d015-4e37-842c-298c6875a614'
-            : user?.role === 'branch'
-              ? user?.id
-              : user?.role === 'partner'
-                ? users[0]?.id
-                : null,
-        date: dayjs(selectedDate).utc(true).valueOf()
-      })
-      await timelineManager.requestUpdate()
-
-      const { timeline } = timelineManager.getTimeline()
-
-      const filteredTimeline = timeline.filter(
-        (value) => getStatus(value, selectedDate) !== 'yayınlandı'
-      )
-
-      setTimeline(filteredTimeline)
-
-      setCurrentLiveItem(
-        filteredTimeline.find((item) => getStatus(item, selectedDate) === 'yayında') || null
-      )
-    } catch (error) {
-      console.error('Error fetching timeline:', error)
-    } finally {
-      console.log('timeline', timeline)
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    if (timeline.length > 0) {
-      const currentIndex = timeline.findIndex((item) => getStatus(item, selectedDate) === 'yayında')
-
-      if (currentIndex !== -1) {
-        const currentSong = timeline[currentIndex]
-
-        setCurrentLiveItem(currentSong)
-        const remainingTime =
-          currentSong.startTime + currentSong.duration - getCurrentTimeInMilliseconds()
-
-        const timeout = setTimeout(() => {
-          const nextIndex = currentIndex + 1
-
-          if (nextIndex < timeline.length) {
-            const updatedTimeline = timeline.filter((item, index) => {
-              const status = getStatus(item, selectedDate)
-              return status === 'yayında' || (status === 'yayınlanacak' && index > currentIndex)
-            })
-
-            setTimeline(updatedTimeline)
-          } else {
-            const finalTimeline = timeline.filter(
-              (item) => getStatus(item, selectedDate) === 'yayınlanacak'
-            )
-            setTimeline(finalTimeline)
-          }
-        }, remainingTime)
-
-        return () => clearTimeout(timeout)
-      }
-    }
-  }, [timeline, selectedDate])
-
-  useEffect(() => {
-    getTimeline()
-  }, [selectedDate, users])
 
   return (loading && <MusicListSkeleton />) || timeline.length > 0 ? (
     <Box
@@ -239,7 +147,6 @@ export default function MusicList() {
           ))}
         </Box>
       </Box>
-      <PlayerBar currentLiveItem={currentLiveItem} />
     </Box>
   ) : (
     <NoDataTimeline />

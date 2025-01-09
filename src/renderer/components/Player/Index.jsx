@@ -7,6 +7,8 @@ import AudioWaveform from '../audio-wave'
 import { getCurrentTimeInMilliseconds } from '../../services/utils/timeline'
 import { useLocation } from 'react-router-dom'
 
+import imgBg from '../../../../resources/ai-logo.jpg'
+
 const PlayerBar = ({ currentLiveItem }) => {
   const [isPlaying, setIsPlaying] = useState(JSON.parse(localStorage.getItem('isPlaying')) || false)
   const [volume, setVolume] = useState(parseFloat(localStorage.getItem('volume')) || 0.2)
@@ -166,7 +168,7 @@ const PlayerBar = ({ currentLiveItem }) => {
             currentLiveItem?.song?.albums?.cover_url ||
             currentLiveItem?.stockAd?.cover_url ||
             currentLiveItem?.specialAd?.cover_url ||
-            `/assets/ai-logo.jpg`
+            imgBg
           }
           alt="album cover"
           sx={{ width: 56, height: 56 }}
