@@ -5,7 +5,6 @@ import PauseIcon from '@mui/icons-material/Pause'
 import { Howl } from 'howler'
 import AudioWaveform from '../audio-wave'
 import { getCurrentTimeInMilliseconds } from '../../services/utils/timeline'
-import { useLocation } from 'react-router-dom'
 
 import imgBg from '../../../../resources/ai-logo.jpg'
 
@@ -17,8 +16,6 @@ const PlayerBar = ({ currentLiveItem }) => {
     parseFloat(localStorage.getItem('currentTime')) || 0
   )
   const [duration, setDuration] = useState(0)
-
-  const location = useLocation()
 
   useEffect(() => {
     if (soundInstance && currentLiveItem) {
