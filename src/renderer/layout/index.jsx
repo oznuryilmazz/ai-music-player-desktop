@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
           width: '100%',
           borderRadius: '16px 0px 0px 16px',
           flexDirection: 'column',
-          alignItems: 'stretch',
+          alignItems: 'center',
           justifyContent: 'stretch'
         }}
       >
