@@ -11,7 +11,9 @@ import { useTimeline } from '../../context/timeline'
 import { useUser } from '../../context/user'
 
 export default function MusicList() {
-  const { timeline, loading } = useTimeline()
+  const { timeline, loading, users } = useTimeline()
+
+  console.log('loading', loading)
 
   const { user } = useUser()
 

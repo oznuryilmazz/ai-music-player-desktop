@@ -103,7 +103,7 @@ export const TimelineProvider = ({ children }) => {
   }, [selectedDate, users, user])
 
   return (
-    <TimelineContext.Provider value={{ timeline, currentLiveItem, loading }}>
+    <TimelineContext.Provider value={{ timeline, currentLiveItem, users, loading }}>
       {children}
     </TimelineContext.Provider>
   )
