@@ -12,11 +12,12 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import logo from '../../../../resources/amblem-ai.png'
 import { useUser } from '../../context/user'
 import { supabase } from '../../services/supabase/client'
+import { useTimeline } from '../../context/timeline'
 
 const Sidebar = () => {
   const navigate = useNavigate()
   const { user, setUser } = useUser()
-  console.log('user', user)
+  const { setTimeline, setCurrentLiveItem, setUserId } = useTimeline()
 
   const handleNavigation = (route) => {
     navigate(route)
@@ -26,6 +27,9 @@ const Sidebar = () => {
     try {
       await supabase.auth.signOut()
       setUser(null)
+      setTimeline([])
+      setCurrentLiveItem(null)
+      setUserId(null)
       navigate('/login')
     } catch (error) {
       console.error('Logout failed:', error.message)

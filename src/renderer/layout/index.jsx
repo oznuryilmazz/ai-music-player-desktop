@@ -2,10 +2,8 @@ import React from 'react'
 import { Box } from '@mui/material'
 import Sidebar from '../components/Sidebar/Index'
 import PlayerBar from '../components/Player/Index'
-import { useTimeline } from '../context/timeline'
 
 const Layout = ({ children }) => {
-  const { currentLiveItem } = useTimeline()
   return (
     <Box
       sx={{
@@ -33,7 +31,7 @@ const Layout = ({ children }) => {
       >
         {children}
 
-        <PlayerBar currentLiveItem={currentLiveItem} />
+        <PlayerBar />
       </Box>
     </Box>
   )

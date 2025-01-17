@@ -7,8 +7,9 @@ import AudioWaveform from '../audio-wave'
 import { getCurrentTimeInMilliseconds } from '../../services/utils/timeline'
 
 import imgBg from '../../../../resources/ai-logo.jpg'
+import { useTimeline } from '../../context/timeline'
 
-const PlayerBar = ({ currentLiveItem }) => {
+const PlayerBar = () => {
   const [isPlaying, setIsPlaying] = useState(JSON.parse(localStorage.getItem('isPlaying')) || false)
   const [volume, setVolume] = useState(parseFloat(localStorage.getItem('volume')) || 0.2)
   const [soundInstance, setSoundInstance] = useState(null)
@@ -16,6 +17,8 @@ const PlayerBar = ({ currentLiveItem }) => {
     parseFloat(localStorage.getItem('currentTime')) || 0
   )
   const [duration, setDuration] = useState(0)
+
+  const { currentLiveItem, loading } = useTimeline()
 
   useEffect(() => {
     if (soundInstance && currentLiveItem) {
@@ -144,87 +147,88 @@ const PlayerBar = ({ currentLiveItem }) => {
     }
   }, [soundInstance, isPlaying])
 
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        padding: '16px 24px',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        borderRadius: '16px',
-        width: 'fit-content',
-        position: 'fixed',
-        bottom: 30,
-        margin: 'auto'
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Avatar
-          variant="square"
-          src={
-            currentLiveItem?.song?.albums?.cover_url ||
-            currentLiveItem?.stockAd?.cover_url ||
-            currentLiveItem?.specialAd?.cover_url ||
-            imgBg
-          }
-          alt="album cover"
-          sx={{ width: 56, height: 56 }}
-        />
-        <Box>
-          <Typography variant="body1" sx={{ color: '#fff', fontWeight: 600 }}>
-            {currentLiveItem?.[currentLiveItem?.type]?.name}
-          </Typography>
-          <Typography variant="caption" sx={{ color: '#aaa' }}>
-            AI Music Bank
-          </Typography>
-        </Box>
-      </Box>
-
+  if (currentLiveItem?.song)
+    return (
       <Box
         sx={{
-          flex: 1,
-          margin: '0 16px',
-          position: 'relative'
+          display: 'flex',
+          alignItems: 'center',
+          padding: '16px 24px',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          borderRadius: '16px',
+          width: 'fit-content',
+          position: 'fixed',
+          bottom: 30,
+          margin: 'auto'
         }}
       >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Avatar
+            variant="square"
+            src={
+              currentLiveItem?.song?.albums?.cover_url ||
+              currentLiveItem?.stockAd?.cover_url ||
+              currentLiveItem?.specialAd?.cover_url ||
+              imgBg
+            }
+            alt="album cover"
+            sx={{ width: 56, height: 56 }}
+          />
+          <Box>
+            <Typography variant="body1" sx={{ color: '#fff', fontWeight: 600 }}>
+              {currentLiveItem?.[currentLiveItem?.type]?.name}
+            </Typography>
+            <Typography variant="caption" sx={{ color: '#aaa' }}>
+              AI Music Bank
+            </Typography>
+          </Box>
+        </Box>
+
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: '8px',
-            color: '#fff',
-            fontSize: '12px',
-            gap: 1
+            flex: 1,
+            margin: '0 16px',
+            position: 'relative'
           }}
         >
-          <Typography variant="caption">
-            {new Date(currentTime).toISOString().substr(14, 5)}
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: '8px',
+              color: '#fff',
+              fontSize: '12px',
+              gap: 1
+            }}
+          >
+            <Typography variant="caption">
+              {new Date(currentTime).toISOString().substr(14, 5)}
+            </Typography>
 
-          <AudioWaveform
-            audioUrl={currentLiveItem?.url}
-            currentTime={currentTime}
-            duration={duration}
-          />
+            <AudioWaveform
+              audioUrl={currentLiveItem?.url}
+              currentTime={currentTime}
+              duration={duration}
+            />
 
-          <Typography variant="caption">
-            {new Date(duration).toISOString().substr(14, 5)}
-          </Typography>
+            <Typography variant="caption">
+              {new Date(duration).toISOString().substr(14, 5)}
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <IconButton onClick={() => handlePlayPause()}>
+            {volume > 0 ? (
+              <PauseIcon sx={{ color: '#fff', fontSize: '13px' }} />
+            ) : (
+              <PlayArrowIcon sx={{ color: '#fff', fontSize: '13px' }} />
+            )}
+          </IconButton>
         </Box>
       </Box>
-
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <IconButton onClick={() => handlePlayPause()}>
-          {volume > 0 ? (
-            <PauseIcon sx={{ color: '#fff', fontSize: '13px' }} />
-          ) : (
-            <PlayArrowIcon sx={{ color: '#fff', fontSize: '13px' }} />
-          )}
-        </IconButton>
-      </Box>
-    </Box>
-  )
+    )
 }
 
 export default PlayerBar
