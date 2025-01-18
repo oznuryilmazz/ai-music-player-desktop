@@ -20,7 +20,7 @@ function createWindow() {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
 
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
   })
 
   if (is.dev && import.meta.env['ELECTRON_RENDERER_URL']) {
@@ -30,16 +30,15 @@ function createWindow() {
   }
 }
 
-// Token'ı Çerezlere Setle
 function setTokenToCookie(token) {
   session.defaultSession.cookies
     .set({
-      url: 'https://zuisuhuepvqscswcocqi.supabase.co', // Supabase URL'nizi yazın
+      url: 'https://zuisuhuepvqscswcocqi.supabase.co',
       name: 'supabase-auth-token',
       value: token,
       path: '/',
-      httpOnly: true, // Tarayıcıda erişilemez yapar (isteğe bağlı)
-      secure: true // HTTPS gerektirir
+      httpOnly: true,
+      secure: true
     })
     .then(() => {
       console.log('Token successfully set to cookie')
@@ -49,7 +48,6 @@ function setTokenToCookie(token) {
     })
 }
 
-// Supabase Oturum Yönetimi
 supabase.auth.onAuthStateChange((event, session) => {
   if (session) {
     console.log('User signed in:', session)

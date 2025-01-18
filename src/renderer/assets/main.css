@@ -2,28 +2,31 @@
 
 body {
   background: linear-gradient(180deg, rgb(58, 53, 87), rgb(53, 53 ,88));
+  overflow: hidden;
 }
 
 
-/* Scrollbar Koyu Tema */
+/* Açık Tema Scrollbar Tasarımı */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: #f0f0f0; /* Daha açık bir renk */
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #444;
-  border-radius: 5px;
+  background: #c0c0c0; /* Açık gri tonunda */
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #666;
+  background: #a0a0a0; /* Hover renginde hafif koyuluk */
 }
 
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #444 #1e1e1e;
+  scrollbar-width: thin; /* Daha ince scrollbar */
+  scrollbar-color: #c0c0c0 #f0f0f0; /* Minimal açık tema renkleri */
 }

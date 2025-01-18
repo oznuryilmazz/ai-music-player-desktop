@@ -1,6 +1,6 @@
 import { Box, Skeleton } from '@mui/material'
 
-export default function MusicListSkeleton() {
+export default function MusicListSkeleton({ count }) {
   return (
     <Box
       sx={{
@@ -12,7 +12,7 @@ export default function MusicListSkeleton() {
         padding: 3
       }}
     >
-      {Array.from(new Array(15)).map((_, index) => (
+      {Array.from(new Array(count)).map((_, index) => (
         <Box
           key={index}
           sx={{

@@ -69,7 +69,7 @@ const AudioWaveform = ({ audioUrl, currentTime, duration }) => {
           const y = height / 2 - barHeight / 2
 
           // Renk değişimi: İlerleme yüzdesine göre turuncuya dönüş
-          ctx.fillStyle = i < currentIndex ? '#FFA500' : '#FFFFFF'
+          ctx.fillStyle = i < currentIndex ? '#23bff4' : '#FFFFFF'
           ctx.fillRect(x, y, barWidth - 1, barHeight)
         }
 

@@ -16,17 +16,18 @@ const Layout = ({ children }) => {
 
       <Box
         sx={{
-          overflowY: 'auto',
+          overflow: 'hidden',
           padding: 2,
+          margin: '10px 10px 10px 0px',
           display: 'flex',
-          height: '100vh',
+          height: '98vh',
           backgroundColor: '#fff',
           color: '#fcfcff',
           width: '100%',
-          borderRadius: '16px 0px 0px 16px',
+          borderRadius: '16px',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'stretch'
+          justifyContent: 'center'
         }}
       >
         {children}

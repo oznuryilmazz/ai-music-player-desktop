@@ -7,22 +7,18 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import imgBg from '../../../../resources/ai-logo.jpg'
 import NoDataTimeline from '../no-data-timeline'
 import MusicListSkeleton from '../skeletons/music-list'
-import { useTimeline } from '../../context/timeline'
-import { useUser } from '../../context/user'
+import { formatTime } from '../../services/utils/format-date'
 
-export default function MusicList() {
-  const { timeline, loading, users } = useTimeline()
-
-  const { user } = useUser()
-
-  const formatTime = (milliseconds) => {
-    const date = new Date(milliseconds)
-    return date.toISOString().substr(11, 8)
-  }
-
+export default function MusicList({
+  timeline,
+  loading,
+  title = 'Canlı Yayın Akışı',
+  height,
+  show = true
+}) {
   if (loading) {
-    return <MusicListSkeleton />
-  } else if (timeline?.length > 0)
+    return <MusicListSkeleton count={show ? 15 : 3} />
+  } else
     return (
       <Box
         sx={{
@@ -33,125 +29,127 @@ export default function MusicList() {
           alignItems: 'center'
         }}
       >
-        <Box sx={{ padding: 3, width: '100%' }}>
+        <Box sx={{ padding: '0px 12px', width: '100%' }}>
           <Box
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: 4
+              marginBottom: 2
             }}
           >
             <Typography variant="h6" sx={{ fontWeight: 700, color: 'rgb(41, 42, 51)' }}>
-              {user?.role === 'admin'
-                ? 'Novada Edremit Avm'
-                : user?.role === 'branch'
-                  ? `${user?.parent?.name} - ${user?.name}`
-                  : user?.role === 'partner'
-                    ? `${users[0]?.parent?.name} - ${users[0]?.name}`
-                    : null}{' '}
-              Canlı Yayını
+              {title}
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
-                <SearchIcon />
-              </IconButton>
-              <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
-                <NotificationsIcon />
-              </IconButton>
-            </Box>
+            {show && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
+                  <SearchIcon />
+                </IconButton>
+                <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
+                  <NotificationsIcon />
+                </IconButton>
+              </Box>
+            )}
           </Box>
-
-          <Box sx={{ marginTop: 4 }}>
-            {timeline.map((song, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 2
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
-                  <Typography
-                    color="rgb(205, 211, 221)"
-                    fontWeight={600}
-                    sx={{ width: '30px', textAlign: 'center' }}
-                  >
-                    {index < 9 ? `0${index + 1}` : index + 1}
-                  </Typography>
-                  <Avatar
-                    variant="square"
-                    sx={{ width: 56, height: 56, backgroundColor: 'transparent' }}
-                  >
-                    <img
-                      src={
-                        song?.song?.albums?.cover_url ||
-                        song?.stockAd?.cover_url ||
-                        song?.specialAd?.cover_url ||
-                        imgBg
-                      }
-                      alt="album cover"
-                      style={{
-                        width: '100%',
-                        height: 'auto',
-                        borderRadius: 16,
-                        maxHeight: 350
-                      }}
-                    />
-                  </Avatar>
-                  <Box sx={{ flex: 1 }}>
-                    <Typography
-                      sx={{
-                        fontWeight: 600,
-                        color: 'rgb(41, 42, 51)',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis'
-                      }}
-                    >
-                      {song?.[song?.type]?.name}
-                    </Typography>
-                    <Typography variant="caption" color="rgb(205, 211, 221)">
-                      AI Music Bank
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Süre */}
+          {timeline.length > 0 ? (
+            <Box sx={{ marginTop: 2, height: height, overflowY: 'auto', overflowX: 'hidden' }}>
+              {timeline.map((song, index) => (
                 <Box
+                  key={index}
                   sx={{
-                    width: '150px',
-                    textAlign: 'center',
                     display: 'flex',
-                    flexDirection: 'row',
-                    gap: 1
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 2
                   }}
                 >
-                  <Typography color="rgb(103, 103, 103)" fontSize="12px">
-                    {formatTime(song?.startTime)}
-                  </Typography>
-                  <Typography color="rgb(103, 103, 103)" fontSize="12px">
-                    {formatTime(song?.startTime + song?.duration)}
-                  </Typography>
-                </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
+                    {show && (
+                      <Typography
+                        color="rgb(205, 211, 221)"
+                        fontWeight={600}
+                        sx={{ width: '30px', textAlign: 'center' }}
+                      >
+                        {index < 9 ? `0${index + 1}` : index + 1}
+                      </Typography>
+                    )}
+                    <Avatar
+                      variant="square"
+                      sx={{ width: 56, height: 56, backgroundColor: 'transparent' }}
+                    >
+                      <img
+                        src={
+                          song?.song?.albums?.cover_url ||
+                          song?.stockAd?.cover_url ||
+                          song?.specialAd?.cover_url ||
+                          imgBg
+                        }
+                        alt="album cover"
+                        style={{
+                          width: '100%',
+                          height: 'auto',
+                          borderRadius: 16,
+                          maxHeight: 350
+                        }}
+                      />
+                    </Avatar>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          color: 'rgb(41, 42, 51)',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}
+                      >
+                        {song?.[song?.type]?.name}
+                      </Typography>
+                      <Typography variant="caption" color="rgb(205, 211, 221)">
+                        AI Music Bank
+                      </Typography>
+                    </Box>
+                  </Box>
 
-                {/* Aksiyon İkonları */}
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                  <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
-                    <FavoriteBorderIcon sx={{ fontSize: '13px' }} />
-                  </IconButton>
-                  <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
-                    <MoreVertIcon sx={{ fontSize: '13px' }} />
-                  </IconButton>
+                  {show && (
+                    <Box
+                      sx={{
+                        width: '150px',
+                        textAlign: 'center',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: 1
+                      }}
+                    >
+                      <Typography color="rgb(103, 103, 103)" fontSize="12px">
+                        {formatTime(song?.startTime)}
+                      </Typography>
+                      <Typography color="rgb(103, 103, 103)" fontSize="12px">
+                        {formatTime(song?.startTime + song?.duration)}
+                      </Typography>
+                    </Box>
+                  )}
+
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                    {show && (
+                      <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
+                        <FavoriteBorderIcon sx={{ fontSize: '13px' }} />
+                      </IconButton>
+                    )}
+                    <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
+                      <MoreVertIcon sx={{ fontSize: '13px' }} />
+                    </IconButton>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
-          </Box>
+              ))}
+            </Box>
+          ) : (
+            <Typography color="rgba(41, 42, 51,70)">
+              Herhangi bir içerik kayıt edilememiştir.
+            </Typography>
+          )}
         </Box>
       </Box>
     )
-  else if (timeline?.length === 0) return <NoDataTimeline />
-  else null
 }
