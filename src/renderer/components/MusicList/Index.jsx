@@ -41,7 +41,7 @@ export default function MusicList({
             <Typography fontSize={16} sx={{ fontWeight: 700, color: 'rgb(41, 42, 51)' }}>
               {title}
             </Typography>
-            {show && (
+            {/* {show && (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
                   <SearchIcon />
@@ -50,7 +50,7 @@ export default function MusicList({
                   <NotificationsIcon />
                 </IconButton>
               </Box>
-            )}
+            )} */}
           </Box>
           {timeline.length > 0 ? (
             <Box sx={{ marginTop: 2, height: height, overflowY: 'auto', overflowX: 'hidden' }}>
@@ -107,8 +107,8 @@ export default function MusicList({
                       >
                         {song?.[song?.type]?.name}
                       </Typography>
-                      <Typography variant="caption" color="rgb(170, 170, 170)" fontSize={12}>
-                        AI Music Bank
+                      <Typography color="rgb(170, 170, 170)" fontSize="11px">
+                        {song?.type === 'ad' ? 'Reklam' : 'AI Music Bank'}
                       </Typography>
                     </Box>
                   </Box>
