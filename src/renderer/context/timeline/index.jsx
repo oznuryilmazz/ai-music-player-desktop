@@ -38,8 +38,6 @@ export const TimelineProvider = ({ children }) => {
           }
         } catch (error) {
           console.error('Error fetching users:', error)
-        } finally {
-          setLoading(false)
         }
       }
     }

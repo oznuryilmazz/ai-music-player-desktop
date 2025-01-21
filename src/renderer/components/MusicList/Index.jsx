@@ -49,7 +49,11 @@ export default function MusicList({
               </Box>
             )} */}
           </Box>
-          {timeline.length > 0 ? (
+          {!loading && timeline.length === 0 ? (
+            <Typography color="rgba(41, 42, 51,70)">
+              Herhangi bir içerik kayıt edilememiştir.
+            </Typography>
+          ) : (
             <Box sx={{ marginTop: 2, height: height, overflowY: 'auto', overflowX: 'hidden' }}>
               {timeline.map((song, index) => (
                 <Box
@@ -142,10 +146,6 @@ export default function MusicList({
                 </Box>
               ))}
             </Box>
-          ) : (
-            <Typography color="rgba(41, 42, 51,70)">
-              Herhangi bir içerik kayıt edilememiştir.
-            </Typography>
           )}
         </Box>
       </Box>
