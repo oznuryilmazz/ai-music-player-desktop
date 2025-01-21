@@ -32,6 +32,7 @@ export default function BannerSwiper() {
         <SwiperSlide>
           <a href="https://aimusic.com.tr" target="_blank" rel="noreferrer">
             <img
+              loading="lazy"
               src={instagramBanner}
               alt="Instagram Banner"
               height={290}
@@ -42,6 +43,7 @@ export default function BannerSwiper() {
         <SwiperSlide>
           <a href="https://www.instagram.com/aimusic.business/" target="_blank" rel="noreferrer">
             <img
+              loading="lazy"
               src={muzikYayiniBanner}
               alt="Müzik Yayını Banner"
               height={290}
@@ -52,6 +54,7 @@ export default function BannerSwiper() {
         <SwiperSlide>
           <a href="https://aimusic.com.tr" target="_blank" rel="noreferrer">
             <img
+              loading="lazy"
               src={havaDurumuBanner}
               alt="Hava Durumu Banner"
               height={290}

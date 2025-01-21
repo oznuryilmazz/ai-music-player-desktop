@@ -26,6 +26,7 @@ const MusicPlayerBar = () => {
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <img
+          loading="lazy"
           src="/images/song-cover.jpg"
           alt="Song Cover"
           style={{

@@ -1,11 +1,8 @@
 import { Box, Typography, Avatar, IconButton } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import imgBg from '../../../../resources/ai-logo.jpg'
-import NoDataTimeline from '../no-data-timeline'
 import MusicListSkeleton from '../skeletons/music-list'
 import { formatTime } from '../../services/utils/format-date'
 
@@ -17,7 +14,7 @@ export default function MusicList({
   show = true
 }) {
   if (loading) {
-    return <MusicListSkeleton count={show ? 15 : 3} />
+    return <MusicListSkeleton count={show ? 5 : 3} />
   } else
     return (
       <Box
@@ -79,6 +76,7 @@ export default function MusicList({
                       sx={{ width: 54, height: 54, backgroundColor: 'transparent' }}
                     >
                       <img
+                        loading="lazy"
                         src={
                           song?.song?.albums?.cover_url ||
                           song?.stockAd?.cover_url ||

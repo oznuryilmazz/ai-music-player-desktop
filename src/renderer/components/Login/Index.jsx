@@ -84,7 +84,7 @@ export default function LoginView({ searchParams }) {
           justifyContent="center"
           sx={{ height: 1, width: '100%' }}
         >
-          <img src={aiAmblem} width="60%" />
+          <img loading="lazy" src={aiAmblem} width="60%" />
 
           {show && (
             <Alert severity="error" style={{ marginBottom: 16 }}>

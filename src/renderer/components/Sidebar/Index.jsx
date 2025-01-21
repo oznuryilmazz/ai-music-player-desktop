@@ -51,7 +51,7 @@ const Sidebar = () => {
     >
       <Box>
         <IconButton onClick={() => handleNavigation('/')} title="Ai Music">
-          <img src={logo} alt="Amblem AI" style={{ width: '70%' }} />
+          <img loading="lazy" src={logo} alt="Amblem AI" style={{ width: '70%' }} />
         </IconButton>
       </Box>
 

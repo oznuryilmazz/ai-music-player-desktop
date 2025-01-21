@@ -25,7 +25,7 @@ export default function MusicListSkeleton({ count }) {
           }}
         >
           <Skeleton variant="text" width={30} />
-          <Skeleton variant="rectangular" width={56} height={56} />
+          <Skeleton variant="rectangular" width={56} height={54} />
           <Box sx={{ flex: 1, marginLeft: 2 }}>
             <Skeleton variant="text" width="100%" />
             <Skeleton variant="text" width="60%" />
