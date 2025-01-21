@@ -7,13 +7,16 @@ import AutoLaunch from 'auto-launch'
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1500,
-    height: 850,
+    height: 900,
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
     }
   })
 

@@ -50,7 +50,7 @@ const Home = () => {
           <MusicList timeline={timeline} loading={loading} height="350px" />
         </Box>
 
-        <Box display="flex" flexDirection="column" gap={1} width="30%">
+        <Box display="flex" flexDirection="column" width="30%">
           <MusicList
             timeline={timeline.filter((x) => x.type === 'ad').splice(0, 3)}
             loading={loading}

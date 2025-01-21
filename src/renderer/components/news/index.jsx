@@ -11,30 +11,34 @@ import mini4 from '../../../../resources/banner/mini-3.jpeg'
 const newsItems = [
   {
     image: mini1,
-    title: 'Family tourism',
-    description: 'The more morrior'
+    title: 'Stok Sihirbazı',
+    description: 'Stok Sihirbazı ile satışlarınızı artırın ve envanterinizi akıllıca yönetin.',
+    link: 'https://aimusic.com.tr/stok-sihirbazi'
   },
   {
     image: mini2,
-    title: 'Adventure tours',
-    description: 'Explore the wild'
+    title: 'HarmoniGram',
+    description: 'İşletmenizde Müzik ve Görselliğin Buluşması',
+    link: 'https://aimusic.com.tr/harmonigram'
   },
   {
     image: mini3,
-    title: 'Cultural heritage',
-    description: 'Discover the history.'
+    title: 'Ai Music Box',
+    description: 'Teknoloji ve müziği bir araya getirir',
+    link: 'https://aimusic.com.tr/ai-music-box/?swcfpc=1'
   },
   {
     image: mini4,
-    title: 'Luxury vacations',
-    description: 'Experience luxury.'
+    title: 'MoodEye',
+    description: 'Müzik, artık sizi gerçekten anlayacak.',
+    link: ''
   }
 ]
 
 export default function News() {
   return (
     <Box sx={{ padding: '0px 12px', width: '100%' }}>
-      <Typography fontSize={16} sx={{ fontWeight: 700, color: 'rgb(41, 42, 51)', marginBottom: 3 }}>
+      <Typography fontSize={16} sx={{ fontWeight: 700, color: 'rgb(41, 42, 51)', marginBottom: 2 }}>
         Haberler
       </Typography>
 
@@ -45,37 +49,44 @@ export default function News() {
             xs={12}
             sm={6}
             md={6}
-            key={index}
             sx={{ display: 'flex', flexDirection: 'column' }}
+            key={index}
           >
-            <Box
-              component="img"
-              src={item.image}
-              alt={item.title}
-              sx={{
-                width: '100%',
-                objectFit: 'cover',
-                height: '180px',
-                borderRadius: 4
-              }}
-            />
-            <Stack marginTop={1}>
-              <Typography
+            <a
+              href={item?.link}
+              target="_blank"
+              rel="noreferrer"
+              style={{ textDecoration: 'none' }}
+            >
+              <Box
+                component="img"
+                src={item.image}
+                alt={item.title}
                 sx={{
-                  fontWeight: 600,
-                  color: 'rgb(41, 42, 51)',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  fontSize: '14px'
+                  width: '100%',
+                  objectFit: 'cover',
+                  height: '140px',
+                  borderRadius: 4
                 }}
-              >
-                {item.title}
-              </Typography>
-              <Typography fontSize={11} color="rgb(41, 42, 51)">
-                {item.description}
-              </Typography>
-            </Stack>
+              />
+              <Stack marginTop={1}>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    color: 'rgb(41, 42, 51)',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    fontSize: '14px'
+                  }}
+                >
+                  {item.title}
+                </Typography>
+                <Typography fontSize={11} color="rgb(41, 42, 51)">
+                  {item.description}
+                </Typography>
+              </Stack>
+            </a>
           </Grid>
         ))}
       </Grid>

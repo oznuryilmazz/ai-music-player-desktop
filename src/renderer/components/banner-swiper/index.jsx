@@ -23,30 +23,41 @@ export default function BannerSwiper() {
         }}
         mousewheel={true}
         autoplay={{
-          delay: 10000, 
-          disableOnInteraction: false 
+          delay: 10000,
+          disableOnInteraction: false
         }}
         modules={[Mousewheel, Pagination, Autoplay]}
         className="mySwiper"
       >
         <SwiperSlide>
-          <img src={instagramBanner} alt="Instagram Banner" height={290} className="bannerImage" />
+          <a href="https://aimusic.com.tr" target="_blank" rel="noreferrer">
+            <img
+              src={instagramBanner}
+              alt="Instagram Banner"
+              height={290}
+              className="bannerImage"
+            />
+          </a>
         </SwiperSlide>
         <SwiperSlide>
-          <img
-            src={muzikYayiniBanner}
-            alt="Müzik Yayını Banner"
-            height={290}
-            className="bannerImage"
-          />
+          <a href="https://www.instagram.com/aimusic.business/" target="_blank" rel="noreferrer">
+            <img
+              src={muzikYayiniBanner}
+              alt="Müzik Yayını Banner"
+              height={290}
+              className="bannerImage"
+            />
+          </a>
         </SwiperSlide>
         <SwiperSlide>
-          <img
-            src={havaDurumuBanner}
-            alt="Hava Durumu Banner"
-            height={290}
-            className="bannerImage"
-          />
+          <a href="https://aimusic.com.tr" target="_blank" rel="noreferrer">
+            <img
+              src={havaDurumuBanner}
+              alt="Hava Durumu Banner"
+              height={290}
+              className="bannerImage"
+            />
+          </a>
         </SwiperSlide>
       </Swiper>
     </Box>
