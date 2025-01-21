@@ -20,7 +20,7 @@ function createWindow() {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
 
-    mainWindow.webContents.openDevTools()
+    //mainWindow.webContents.openDevTools()
   })
 
   if (is.dev && import.meta.env['ELECTRON_RENDERER_URL']) {

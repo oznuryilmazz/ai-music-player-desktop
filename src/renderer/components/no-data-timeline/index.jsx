@@ -4,7 +4,6 @@ export default function NoDataTimeline() {
   return (
     <Box
       sx={{
-        height: '100vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

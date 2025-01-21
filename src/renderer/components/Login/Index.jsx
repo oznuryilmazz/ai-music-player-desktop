@@ -72,7 +72,6 @@ export default function LoginView({ searchParams }) {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        height: 1,
         backgroundColor: 'white !important',
         width: '100vw',
         height: '100vh'

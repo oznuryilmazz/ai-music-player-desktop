@@ -45,7 +45,8 @@ const Sidebar = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '24px 0'
+        padding: '24px 0',
+        height: '100vh'
       }}
     >
       <Box>

@@ -43,7 +43,7 @@ const Home = () => {
           </IconButton>
         </Box>
       </Box>
-      <Box display="flex" flexDirection="row" gap={1} width="100%">
+      <Box display="flex" flexDirection="row" gap={3} width="100%">
         <Box display="flex" flexDirection="column" gap={3} width="70%">
           <BannerSwiper />
 

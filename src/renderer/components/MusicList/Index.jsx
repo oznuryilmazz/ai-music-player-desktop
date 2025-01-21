@@ -38,7 +38,7 @@ export default function MusicList({
               marginBottom: 2
             }}
           >
-            <Typography variant="h6" sx={{ fontWeight: 700, color: 'rgb(41, 42, 51)' }}>
+            <Typography fontSize={16} sx={{ fontWeight: 700, color: 'rgb(41, 42, 51)' }}>
               {title}
             </Typography>
             {show && (
@@ -69,14 +69,14 @@ export default function MusicList({
                       <Typography
                         color="rgb(205, 211, 221)"
                         fontWeight={600}
-                        sx={{ width: '30px', textAlign: 'center' }}
+                        sx={{ width: '20px', textAlign: 'center' }}
                       >
                         {index < 9 ? `0${index + 1}` : index + 1}
                       </Typography>
                     )}
                     <Avatar
                       variant="square"
-                      sx={{ width: 56, height: 56, backgroundColor: 'transparent' }}
+                      sx={{ width: 54, height: 54, backgroundColor: 'transparent' }}
                     >
                       <img
                         src={
@@ -94,51 +94,51 @@ export default function MusicList({
                         }}
                       />
                     </Avatar>
-                    <Box sx={{ flex: 1 }}>
+                    <Box>
                       <Typography
                         sx={{
                           fontWeight: 600,
                           color: 'rgb(41, 42, 51)',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
-                          textOverflow: 'ellipsis'
+                          textOverflow: 'ellipsis',
+                          fontSize: '14px'
                         }}
                       >
                         {song?.[song?.type]?.name}
                       </Typography>
-                      <Typography variant="caption" color="rgb(205, 211, 221)">
+                      <Typography variant="caption" color="rgb(170, 170, 170)" fontSize={12}>
                         AI Music Bank
                       </Typography>
                     </Box>
                   </Box>
 
-                  {show && (
-                    <Box
-                      sx={{
-                        width: '150px',
-                        textAlign: 'center',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        gap: 1
-                      }}
-                    >
-                      <Typography color="rgb(103, 103, 103)" fontSize="12px">
-                        {formatTime(song?.startTime)}
-                      </Typography>
-                      <Typography color="rgb(103, 103, 103)" fontSize="12px">
-                        {formatTime(song?.startTime + song?.duration)}
-                      </Typography>
-                    </Box>
-                  )}
+                  <Box
+                    sx={{
+                      width: '450px',
+                      textAlign: 'center',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      gap: 1
+                    }}
+                  >
+                    <Typography color="rgb(41, 42, 51)" fontSize="12px" fontWeight={600}>
+                      {formatTime(song?.startTime)}
+                    </Typography>
+                    <Typography color="rgb(103, 103, 103)" fontSize="12px">
+                      {formatTime(song?.startTime + song?.duration)}
+                    </Typography>
+                  </Box>
 
                   <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                     {show && (
                       <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
-                        <FavoriteBorderIcon sx={{ fontSize: '13px' }} />
+                        <FavoriteBorderIcon sx={{ fontSize: '16px' }} />
                       </IconButton>
                     )}
                     <IconButton sx={{ color: 'rgb(41, 42, 51)' }}>
-                      <MoreVertIcon sx={{ fontSize: '13px' }} />
+                      <MoreVertIcon sx={{ fontSize: '16px' }} />
                     </IconButton>
                   </Box>
                 </Box>

@@ -34,7 +34,7 @@ const newsItems = [
 export default function News() {
   return (
     <Box sx={{ padding: '0px 12px', width: '100%' }}>
-      <Typography variant="h6" sx={{ fontWeight: 700, color: 'rgb(41, 42, 51)', marginBottom: 3 }}>
+      <Typography fontSize={16} sx={{ fontWeight: 700, color: 'rgb(41, 42, 51)', marginBottom: 3 }}>
         Haberler
       </Typography>
 
@@ -60,10 +60,19 @@ export default function News() {
               }}
             />
             <Stack marginTop={1}>
-              <Typography fontSize={16} fontWeight={600} color="#000">
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  color: 'rgb(41, 42, 51)',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  fontSize: '14px'
+                }}
+              >
                 {item.title}
               </Typography>
-              <Typography fontSize={11} color="#00000080">
+              <Typography fontSize={11} color="rgb(41, 42, 51)">
                 {item.description}
               </Typography>
             </Stack>

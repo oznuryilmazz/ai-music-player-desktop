@@ -9,7 +9,6 @@ const Layout = ({ children }) => {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        height: '100vh'
       }}
     >
       <Sidebar />
@@ -20,7 +19,6 @@ const Layout = ({ children }) => {
           padding: 2,
           margin: '10px 10px 10px 0px',
           display: 'flex',
-          height: '98vh',
           backgroundColor: '#fff',
           color: '#fcfcff',
           width: '100%',
