@@ -1,8 +1,40 @@
-import { app, BrowserWindow, session } from 'electron'
+import { app, BrowserWindow, ipcMain, session } from 'electron'
 import { join } from 'path'
 import { electronApp, is } from '@electron-toolkit/utils'
 import { supabase } from '../renderer/services/supabase/client'
 import AutoLaunch from 'auto-launch'
+import { autoUpdater } from 'electron-updater'
+import log from 'electron-log'
+
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+
+function checkForUpdates() {
+  autoUpdater.checkForUpdates()
+}
+
+autoUpdater.on('update-available', (info) => {
+  const mainWindow = BrowserWindow.getAllWindows()[0]
+
+  mainWindow.webContents.send('update-available', info)
+})
+
+autoUpdater.on('update-downloaded', () => {
+  const response = dialog.showMessageBoxSync({
+    type: 'info',
+    title: 'Güncelleme Mevcut',
+    message: 'Yeni bir güncelleme indirildi. Şimdi yüklemek ister misiniz?',
+    buttons: ['Evet', 'Hayır']
+  })
+
+  if (response === 0) {
+    autoUpdater.quitAndInstall()
+  }
+})
+
+ipcMain.on('check-for-updates', () => {
+  checkForUpdates()
+})
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -82,6 +114,8 @@ appAutoLauncher
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.example.aimusicplayer')
+
+  checkForUpdates()
 
   createWindow()
 
