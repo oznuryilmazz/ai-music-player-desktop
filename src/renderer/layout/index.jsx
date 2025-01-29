@@ -2,13 +2,14 @@ import React from 'react'
 import { Box } from '@mui/material'
 import Sidebar from '../components/Sidebar/Index'
 import PlayerBar from '../components/Player/Index'
+import UpdateChecker from '../components/update-checker'
 
 const Layout = ({ children }) => {
   return (
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'row'
       }}
     >
       <Sidebar />
@@ -31,6 +32,8 @@ const Layout = ({ children }) => {
         {children}
 
         <PlayerBar />
+
+        <UpdateChecker />
       </Box>
     </Box>
   )

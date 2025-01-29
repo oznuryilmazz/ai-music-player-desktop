@@ -21,7 +21,7 @@ const ComingSoonPage = () => {
           mb: 2
         }}
       >
-        Çok Yakındaasdasdas
+        Çok Yakında
       </Typography>
       <Typography
         variant="h6"

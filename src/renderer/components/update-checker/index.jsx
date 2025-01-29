@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, Dialog, DialogTitle, DialogActions } from '@mui/material'
-import { ipcRenderer } from 'electron'
+const { ipcRenderer } = window.electron
 
 export default function UpdateChecker() {
   const [updateAvailable, setUpdateAvailable] = useState(false)
@@ -15,15 +15,8 @@ export default function UpdateChecker() {
     }
   }, [])
 
-  const handleCheckForUpdates = () => {
-    ipcRenderer.send('check-for-updates')
-  }
-
   return (
     <div>
-      <Button variant="contained" onClick={handleCheckForUpdates}>
-        Güncellemeleri Kontrol Et
-      </Button>
       <Dialog open={updateAvailable} onClose={() => setUpdateAvailable(false)}>
         <DialogTitle>Yeni Güncelleme Mevcut!</DialogTitle>
         <DialogActions>
