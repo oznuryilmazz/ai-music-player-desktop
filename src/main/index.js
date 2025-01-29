@@ -10,7 +10,7 @@ autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
 
 function checkForUpdates() {
-  autoUpdater.checkForUpdates()
+  autoUpdater.checkForUpdatesAndNotify()
 }
 
 autoUpdater.on('update-available', (info) => {
