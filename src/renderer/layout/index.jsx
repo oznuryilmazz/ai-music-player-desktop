@@ -32,8 +32,6 @@ const Layout = ({ children }) => {
         {children}
 
         <PlayerBar />
-
-        <UpdateChecker />
       </Box>
     </Box>
   )

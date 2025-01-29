@@ -23,7 +23,7 @@ export default function UpdateChecker() {
   return (
     <div>
       <Button variant="contained" onClick={handleCheckForUpdates}>
-        Güncellemeleri Kontrol Et
+        Güncellemeleri Kontrol Etakjslkajdlkasjd
       </Button>
       <Dialog open={updateAvailable} onClose={() => setUpdateAvailable(false)}>
         <DialogTitle>Yeni Güncelleme Mevcut!</DialogTitle>

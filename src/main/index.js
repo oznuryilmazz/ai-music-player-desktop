@@ -8,27 +8,53 @@ import log from 'electron-log'
 
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
+autoUpdater.autoDownload = true
 
 function checkForUpdates() {
-  autoUpdater.checkForUpdatesAndNotify()
+  console.log('🔍 Güncellemeler kontrol ediliyor...')
+  autoUpdater
+    .checkForUpdates()
+    .then((updateInfo) => {
+      console.log('✅ Güncelleme bilgisi:', updateInfo)
+    })
+    .catch((error) => {
+      console.error('❌ Güncelleme kontrolü sırasında hata:', error)
+    })
 }
 
 autoUpdater.on('update-available', (info) => {
+  console.log('🆕 Yeni güncelleme bulundu:', info.version)
   const mainWindow = BrowserWindow.getAllWindows()[0]
-
   mainWindow.webContents.send('update-available', info)
 })
 
-autoUpdater.on('update-downloaded', () => {
-  const response = dialog.showMessageBoxSync({
+autoUpdater.on('update-not-available', () => {
+  console.log('✅ Güncel sürüm kullanıyorsunuz, yeni güncelleme yok.')
+})
+
+autoUpdater.on('error', (error) => {
+  console.error('❌ Güncelleme hatası:', error)
+})
+
+autoUpdater.on('update-downloaded', async () => {
+  console.log('✅ Güncelleme indirildi, kullanıcıya bildirim gönderildi.')
+
+  const mainWindow = BrowserWindow.getAllWindows()[0]
+
+  const response = await dialog.showMessageBox(mainWindow, {
     type: 'info',
     title: 'Güncelleme Mevcut',
     message: 'Yeni bir güncelleme indirildi. Şimdi yüklemek ister misiniz?',
-    buttons: ['Evet', 'Hayır']
+    buttons: ['Evet', 'Hayır'],
+    defaultId: 0, // Varsayılan olarak "Evet" seçili olacak
+    cancelId: 1 // Kullanıcı ESC veya kapat butonuna basarsa "Hayır" olarak işlem yapar
   })
 
-  if (response === 0) {
+  if (response.response === 0) {
+    console.log('🚀 Güncelleme yükleniyor...')
     autoUpdater.quitAndInstall()
+  } else {
+    console.log('❌ Kullanıcı güncellemeyi yüklemeyi reddetti.')
   }
 })
 
