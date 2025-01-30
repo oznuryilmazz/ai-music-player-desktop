@@ -16,6 +16,7 @@ export const TimelineProvider = ({ children }) => {
   const [currentLiveItem, setCurrentLiveItem] = useState(null)
   const [userId, setUserId] = useState(null)
   const [offlineMode, setOfflineMode] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState('')
 
   const { user } = useUser()
 
@@ -49,6 +50,8 @@ export const TimelineProvider = ({ children }) => {
 
   const getTimeline = async (userId) => {
     setLoading(true)
+
+    setLoadingMessage('Timeline yedekleniyor...')
     try {
       const timelineManager = new TimelineManager({
         client: supabase,
@@ -64,14 +67,15 @@ export const TimelineProvider = ({ children }) => {
       )
 
       setTimeline(filteredTimeline)
-      await window.api.saveTimeline(filteredTimeline)
 
-      setCurrentLiveItem(
-        filteredTimeline.find((item) => getStatus(item, selectedDate) === 'yayında') || null
-      )
+      if (window.api && window.api.saveTimeline) {
+        await window.api.saveTimeline(updatedTimeline)
+      } else {
+        console.error('Electron API tanımlı değil!')
+      }
 
-      for (const song of filteredTimeline) {
-        if (song.url) {
+      for (const song of updatedTimeline) {
+        if (song.url && window.api && window.api.downloadSong) {
           try {
             await window.api.downloadSong(song)
           } catch (error) {
@@ -79,6 +83,12 @@ export const TimelineProvider = ({ children }) => {
           }
         }
       }
+
+      setOfflineMode(false)
+
+      setCurrentLiveItem(
+        filteredTimeline.find((item) => getStatus(item, selectedDate) === 'yayında') || null
+      )
     } catch (error) {
       console.error('Error fetching timeline:', error)
       const offlineData = await window.api.loadTimeline()
@@ -86,6 +96,7 @@ export const TimelineProvider = ({ children }) => {
       setOfflineMode(true)
     } finally {
       setLoading(false)
+      setTimeout(() => setLoadingMessage(''), 3000)
     }
   }
 
@@ -134,7 +145,9 @@ export const TimelineProvider = ({ children }) => {
         setCurrentLiveItem,
         setUserId,
         users,
-        loading
+        loading,
+        offlineMode,
+        loadingMessage
       }}
     >
       {children}

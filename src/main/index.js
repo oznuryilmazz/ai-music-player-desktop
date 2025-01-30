@@ -162,6 +162,12 @@ app.whenReady().then(() => {
 })
 
 ipcMain.handle('download-song', async (event, song) => {
+  console.log(song)
+  if (!song || !song.url) {
+    console.error('❌ Hatalı şarkı verisi:', song)
+    return null
+  }
+
   const filePath = path.join(musicCachePath, `${song.id}.mp3`)
 
   // Eğer şarkı zaten varsa, indirme
