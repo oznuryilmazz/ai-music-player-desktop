@@ -1,23 +1,29 @@
-// electron.vite.config.mjs
-import { resolve } from "path";
-import { defineConfig, externalizeDepsPlugin } from "electron-vite";
-import react from "@vitejs/plugin-react";
-var electron_vite_config_default = defineConfig({
+import { resolve } from 'path'
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    build: {
+      target: 'node16' // Electron ana süreci için uygun hedef
+    }
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    build: {
+      target: 'node16' // Preload süreci için uygun hedef
+    }
   },
   renderer: {
     resolve: {
       alias: {
-        "@renderer": resolve("src/renderer")
+        '@renderer': resolve('src/renderer')
       }
     },
-    plugins: [react()]
+    plugins: [react()],
+    build: {
+      target: 'web' // Renderer süreci için doğru hedef
+    }
   }
-});
-export {
-  electron_vite_config_default as default
-};
+})

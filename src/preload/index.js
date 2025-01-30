@@ -1,7 +1,11 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-const api = {}
+const api = {
+  downloadSong: (song) => ipcRenderer.invoke('download-song', song),
+  saveTimeline: (timeline) => ipcRenderer.invoke('save-timeline', timeline),
+  loadTimeline: () => ipcRenderer.invoke('load-timeline')
+}
 
 if (import.meta.contextIsolated) {
   try {

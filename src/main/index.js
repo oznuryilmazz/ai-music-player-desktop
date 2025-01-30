@@ -1,14 +1,23 @@
 import { app, BrowserWindow, ipcMain, session } from 'electron'
-import { join } from 'path'
+import path, { join } from 'path'
 import { electronApp, is } from '@electron-toolkit/utils'
 import { supabase } from '../renderer/services/supabase/client'
 import AutoLaunch from 'auto-launch'
 import { autoUpdater } from 'electron-updater'
 import log from 'electron-log'
+import fs from 'fs'
+import axios from 'axios'
 
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
 autoUpdater.autoDownload = true
+
+const musicCachePath = path.join(app.getPath('userData'), 'music_cache')
+const jsonPath = path.join(musicCachePath, 'music_timeline.json')
+
+if (!fs.existsSync(musicCachePath)) {
+  fs.mkdirSync(musicCachePath, { recursive: true })
+}
 
 function checkForUpdates() {
   console.log('🔍 Güncellemeler kontrol ediliyor...')
@@ -150,6 +159,48 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+})
+
+ipcMain.handle('download-song', async (event, song) => {
+  const filePath = path.join(musicCachePath, `${song.id}.mp3`)
+
+  // Eğer şarkı zaten varsa, indirme
+  if (fs.existsSync(filePath)) {
+    console.log(`Şarkı zaten var: ${filePath}`)
+    return filePath
+  }
+
+  console.log(`Şarkı indiriliyor: ${song.url}`)
+
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: song.url,
+      responseType: 'stream'
+    })
+
+    const writer = fs.createWriteStream(filePath)
+    response.data.pipe(writer)
+
+    return new Promise((resolve, reject) => {
+      writer.on('finish', () => resolve(filePath))
+      writer.on('error', reject)
+    })
+  } catch (error) {
+    console.error(`Şarkı indirilemedi: ${song.name}`, error)
+    return null
+  }
+})
+
+ipcMain.handle('save-timeline', async (event, timeline) => {
+  fs.writeFileSync(jsonPath, JSON.stringify(timeline, null, 2), 'utf-8')
+})
+
+ipcMain.handle('load-timeline', async () => {
+  if (fs.existsSync(jsonPath)) {
+    return JSON.parse(fs.readFileSync(jsonPath, 'utf-8'))
+  }
+  return []
 })
 
 app.on('window-all-closed', () => {

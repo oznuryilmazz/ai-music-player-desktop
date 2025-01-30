@@ -15,6 +15,8 @@ export const TimelineProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [currentLiveItem, setCurrentLiveItem] = useState(null)
   const [userId, setUserId] = useState(null)
+  const [offlineMode, setOfflineMode] = useState(false)
+
   const { user } = useUser()
 
   console.log('userId', userId)
@@ -62,11 +64,26 @@ export const TimelineProvider = ({ children }) => {
       )
 
       setTimeline(filteredTimeline)
+      await window.api.saveTimeline(filteredTimeline)
+
       setCurrentLiveItem(
         filteredTimeline.find((item) => getStatus(item, selectedDate) === 'yayında') || null
       )
+
+      for (const song of filteredTimeline) {
+        if (song.url) {
+          try {
+            await window.api.downloadSong(song)
+          } catch (error) {
+            console.error(`Şarkı indirilemedi: ${song.name}`, error)
+          }
+        }
+      }
     } catch (error) {
       console.error('Error fetching timeline:', error)
+      const offlineData = await window.api.loadTimeline()
+      setTimeline(offlineData)
+      setOfflineMode(true)
     } finally {
       setLoading(false)
     }
