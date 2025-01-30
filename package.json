@@ -1,6 +1,6 @@
 {
   "name": "ai-music-player-desktop",
-  "version": "1.0.4",
+  "version": "1.0.11",
   "description": "Müziğin hep elinin altında, AI Music’le her yerden kolayca ayarla!",
   "main": "./out/main/index.js",
   "author": "example.com",

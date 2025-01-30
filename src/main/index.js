@@ -41,21 +41,23 @@ autoUpdater.on('update-downloaded', async () => {
 
   const mainWindow = BrowserWindow.getAllWindows()[0]
 
-  const response = await dialog.showMessageBox(mainWindow, {
-    type: 'info',
-    title: 'Güncelleme Mevcut',
-    message: 'Yeni bir güncelleme indirildi. Şimdi yüklemek ister misiniz?',
-    buttons: ['Evet', 'Hayır'],
-    defaultId: 0, // Varsayılan olarak "Evet" seçili olacak
-    cancelId: 1 // Kullanıcı ESC veya kapat butonuna basarsa "Hayır" olarak işlem yapar
-  })
+  setImmediate(async () => {
+    const response = await dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      title: 'Güncelleme Mevcut',
+      message: 'Yeni bir güncelleme indirildi. Şimdi yüklemek ister misiniz?',
+      buttons: ['Evet', 'Hayır'],
+      defaultId: 0,
+      cancelId: 1
+    })
 
-  if (response.response === 0) {
-    console.log('🚀 Güncelleme yükleniyor...')
-    autoUpdater.quitAndInstall()
-  } else {
-    console.log('❌ Kullanıcı güncellemeyi yüklemeyi reddetti.')
-  }
+    if (response.response === 0) {
+      console.log('🚀 Güncelleme yükleniyor...')
+      autoUpdater.quitAndInstall()
+    } else {
+      console.log('❌ Kullanıcı güncellemeyi yüklemeyi reddetti.')
+    }
+  })
 })
 
 ipcMain.on('check-for-updates', () => {

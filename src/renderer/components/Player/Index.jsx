@@ -76,7 +76,7 @@ const PlayerBar = () => {
       if (volume > 0) {
         setVolume(0) // Çalma sırasında sesi sıfırla
       } else {
-        setVolume(0.2) // Tekrar başlatıldığında sesi eski seviyeye getir
+        setVolume(1) // Tekrar başlatıldığında sesi eski seviyeye getir
       }
       setIsPlaying(!isPlaying) // Durum değişikliğini takip et
     }
